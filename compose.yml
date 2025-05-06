@@ -1,0 +1,6 @@
+# This is a compose.yml file. This allows us to run this application pretty easily on the server in a container.
+# The docker file allows us to build the application and run it in a container.
+services:
+  app:
+    build: .
+    # Todo: Finish this
