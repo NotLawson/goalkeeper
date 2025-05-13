@@ -9,4 +9,4 @@ app.config['SECRET_KEY'] = 'your_secret_key_here'
 def index():
     return render_template('index.html')
 
-app.run(port=5000)
+app.run(port=5000, debug=True)
