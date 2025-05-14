@@ -1,10 +1,15 @@
-<!--Comment-->
-<html>
-    <head>
-        <title>Flask App</title>
-    </head>
-    <body>
-        <h1>Welcome to the Flask App!</h1>
-        <p>This is a simple Flask application.</p>
-    </body>
-</html>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block imports %}
+    <link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <h1>Welcome to JCI</h1>
+        <p>This is the page that you get redirected to upon navigating to home without being signed in</p>
+
+        <p>
+            This is a different line of text!
+        </p>
+    </div>
+{% endblock %}
