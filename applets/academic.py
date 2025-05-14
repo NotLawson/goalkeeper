@@ -6,8 +6,10 @@ base = "academic"
 
 
 # Applet
-from flask_example import Blueprint, render_template, abort
-from jinja2 import TemplateNotFound
-from __main__ import core
+from flask import render_template, abort
 
-app = Blueprint(name, __name__, template_folder='templates', static_folder='static')
+from __main__ import app, db, core
+
+
+
+
