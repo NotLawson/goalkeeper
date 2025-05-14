@@ -1,5 +1,5 @@
 FROM python3.11-slim
-LABEL maintainer="@notlawson and @mitch.exists"
+LABEL maintainer="@NotLawson and @MitchExists"
 LABEL description="A Docker image for the server file in this repository."
 
 # Set the working directory
