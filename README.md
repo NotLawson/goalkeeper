@@ -12,6 +12,8 @@ Notes and ideas surrounding the actual development
 
 ### Structure
 - General: General functions like the homepage, includes "quests"
+    - Homepage
+    - Quests, daily goals
 - Mental: Shows stats and functions for the mental health side of the app
 - Physical: Shows stats and functions for the physical health side of the app
 - Accounts: Account and profile manager
