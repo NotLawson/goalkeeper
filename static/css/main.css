@@ -1,1 +1,43 @@
-/* Main CSS file for the application */
+/* Make website look good (hopefully) */
+p {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 13px;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+H1, H2, H3 {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* try every center case and one should hopefully work */
+.center {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* Allows formatting specifically for navbar */
+.navbar {
+    display: flex;
+    align-items: center; /* vertically align h1 and links */
+    justify-content: space-between; /* puts space between h1 and links */
+    flex: 1;
+}
+
+/* lets us make specific changes to just the contents of the navbar */
+.navbar-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    color: rgb(244, 188, 119);
+    flex: 5;
+}
+
+.navbar-links:hover {
+    color:darkseagreen;
+}
