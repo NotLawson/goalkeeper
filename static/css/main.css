@@ -1,12 +1,13 @@
 /* Make website look good (hopefully) */
 body {
-    overflow: hidden;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;  /* No scrolling */
+    margin: 0;  /* attempt at making formating more standardised */
+    display: flex;  /* I love flex */
+    flex-direction: column;  /* my formatting relies on it, so don't touch it */
     height: 100vh; /* full screen height */
 }
 
+/* make stuff look nice */
 p {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
@@ -26,6 +27,7 @@ a {
     text-decoration: none !important;
 }
 
+ /* a:hover allows us to change they style when moused over */
 a:hover {
     color:darkseagreen !important;
 }
@@ -42,30 +44,29 @@ a:hover {
     display: flex;
     align-items: center; /* vertically align h1 and links */
     justify-content: space-between; /* puts space between h1 and links */
-    flex: 1;
-    margin: 20px;
-    background-color: transparent;
+    flex: 1;  /* assigns less space to this box 1:5 */
+    margin: 20px;  /* distance from wall */
 }
 
 /* lets us make specific changes to just the contents of the navbar */
 .navbar-links {
     display: flex; /* makes the divisions flexible and is how they're aligned together */
-    flex: 5; /* gives this division more space in topbar */
+    flex: 5; /* gives this division more space in topbar 5:1 */
     gap: 8px; /* creates space between objects */
     align-items: center; /* duh */
     justify-content: flex-end; /* places the links at the end of the division (right) */
 }
 
 .navbar-links a {
-    padding-right: 18px;
+    padding-right: 18px; /* looks nice ig */
 }
 
 /* the body of the homepage */
 .custom-body {
-    display: flex;
-    overflow: hidden;
-    height: 100%;
-    align-items: flex-end;
-    justify-content: center;
-    padding-bottom: 20px;
+    display: flex; /* my beloved */
+    overflow: hidden;  /* We don't want people scrolling on a landing page */
+    height: 100%; /* take up space so we can align text to the bottom */
+    align-items: flex-end;  /* the aligning I just mentioned ^^^ */
+    justify-content: center; /* center the text horizontally */
+    padding-bottom: 20px; /* get some distance so it doesn't look like a footer */
 }
