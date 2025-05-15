@@ -2,9 +2,6 @@
 body {
     overflow: hidden;
     margin: 0;
-}
-
-.container {
     display: flex;
     flex-direction: column;
     height: 100vh; /* full screen height */
@@ -24,6 +21,7 @@ H1, H2, H3 {
 }
 
 a {
+    font-family: "Helvetica Neue", Arial, sans-serif;
     color: rgb(244, 188, 119) !important;
     text-decoration: none !important;
 }
@@ -46,6 +44,7 @@ a:hover {
     justify-content: space-between; /* puts space between h1 and links */
     flex: 1;
     margin: 20px;
+    background-color: transparent;
 }
 
 /* lets us make specific changes to just the contents of the navbar */
@@ -66,5 +65,7 @@ a:hover {
     display: flex;
     overflow: hidden;
     height: 100%;
-    align-items: center;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 20px;
 }
