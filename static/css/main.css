@@ -1,7 +1,18 @@
 /* Make website look good (hopefully) */
+body {
+    overflow: hidden;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* full screen height */
+}
+
 p {
     font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 13px;
+    font-size: 15px;
     margin-top: 5px;
     margin-left: 5px;
 }
@@ -12,6 +23,15 @@ H1, H2, H3 {
     font-weight: bold;
 }
 
+a {
+    color: rgb(244, 188, 119) !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    color:darkseagreen !important;
+}
+
 /* try every center case and one should hopefully work */
 .center {
     text-align: center;
@@ -19,25 +39,32 @@ H1, H2, H3 {
     justify-content: center;
 }
 
-
-
 /* Allows formatting specifically for navbar */
 .navbar {
     display: flex;
     align-items: center; /* vertically align h1 and links */
     justify-content: space-between; /* puts space between h1 and links */
     flex: 1;
+    margin: 20px;
 }
 
 /* lets us make specific changes to just the contents of the navbar */
 .navbar-links {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    color: rgb(244, 188, 119);
-    flex: 5;
+    display: flex; /* makes the divisions flexible and is how they're aligned together */
+    flex: 5; /* gives this division more space in topbar */
+    gap: 8px; /* creates space between objects */
+    align-items: center; /* duh */
+    justify-content: flex-end; /* places the links at the end of the division (right) */
 }
 
-.navbar-links:hover {
-    color:darkseagreen;
+.navbar-links a {
+    padding-right: 18px;
+}
+
+/* the body of the homepage */
+.custom-body {
+    display: flex;
+    overflow: hidden;
+    height: 100%;
+    align-items: center;
 }
