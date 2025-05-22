@@ -1,0 +1,11 @@
+{
+    "database": {
+        "host": "postgres",
+        "port": 5432,
+        "user": "postgres",
+        "password": "postgres",
+        "database": "postgres"
+    },
+    "logging": "debug",
+    "secret_key": "SUPER_SECRET_KEY"
+}
