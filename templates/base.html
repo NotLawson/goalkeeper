@@ -8,18 +8,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
-        <div class="navbar">   
-            <h1>JCI (Just Checking In)</h1>
-            
-            <div class="navbar-links">
-                <a href="#">Login</a>
-                <a href="#">Sign-up</a>
-                <a href="#">Abt us?</a>
+        {% block body %}
+        {% endblock %}
+
+        <div class="base-nav">
+            <div class="base-nav-buttons">
+                <button>Buttons</button>
+                <button>Buttons</button>
+                <button>Buttons</button>
+                <button>Buttons</button>
+                <button>Buttons</button>
             </div>
         </div>
 
-        <div class='custom-body'>
-        {% block body %}{% endblock %}
-        </div>
     </body>
 </html>

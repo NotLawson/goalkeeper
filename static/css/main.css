@@ -3,7 +3,7 @@ body {
     overflow: hidden;  /* No scrolling */
     margin: 0;  /* attempt at making formating more standardised */
     display: flex;  /* I love flex */
-    flex-direction: column;  /* sorts divisions above each other (aka how my homepage works) */
+    flex-direction: column;  /* sorts divisions above each other (aka how the homepage works) */
     height: 100vh; /* full screen height */
 }
 
@@ -27,7 +27,7 @@ a {
     text-decoration: none !important;
 }
 
- /* a:hover allows us to change they style when moused over */
+ /* a:hover allows us to change the style when moused over */
 a:hover {
     color:darkseagreen !important;
 }
@@ -40,7 +40,7 @@ a:hover {
 }
 
 /* Allows formatting specifically for navbar */
-.navbar {
+.index-navbar {
     display: flex;
     align-items: center; /* vertically align h1 and links */
     justify-content: space-between; /* puts space between h1 and links */
@@ -49,7 +49,7 @@ a:hover {
 }
 
 /* lets us make specific changes to just the contents of the navbar */
-.navbar-links {
+.index-navbar-links {
     display: flex; /* makes the divisions flexible and is how they're aligned together */
     flex: 5; /* gives this division more space in topbar 5:1 */
     gap: 8px; /* creates space between objects */
@@ -61,12 +61,35 @@ a:hover {
     padding-right: 18px; /* looks nice ig */
 }
 
+.base-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    background-color: #222; /* Example color */
+    color: white;
+    position: sticky;
+    bottom: 0;
+    z-index: 1000;
+}
+
+.base-nav-buttons {
+    height: 100%;
+    padding: 0 20px;
+    align-items: center;
+}
+
 /* the body of the homepage */
-.custom-body {
+.index-custom-body {
     display: flex; /* my beloved */
     overflow: hidden;  /* We don't want people scrolling on a landing page */
-    height: 100%; /* take up space so we can align text to the bottom */
-    align-items: flex-end;  /* the aligning I just mentioned ^^^ */
+    height: 100%; /* take up the rest of the page in space */
     justify-content: center; /* center the text horizontally */
     padding-bottom: 20px; /* get some distance so it doesn't look like a footer */
+}
+
+.custom-body {
+    flex: 1;
+    padding: 1rem;
+    box-sizing: border-box;
 }

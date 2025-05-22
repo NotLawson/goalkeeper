@@ -1,14 +1,25 @@
-{% extends "base.html" %}
-{% block title %}Home{% endblock %}
-{% block imports %}
+<html>
+<head>
     <link rel="stylesheet" href="/static/css/main.css">
-{% endblock %}
-{% block body %}
-    
-<p style="margin: 10px; text-align: center;">
-            hey, this is just a little website that plans to help people maintain their goals, these goals could be mental, physical, anything really. Feel free to 
-            <a href="#">create an account</a>
-            and try it out
-        </p>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 
-{% endblock %}
+<div class="index-navbar">   
+    <h1>JCI (Just Checking In)</h1>
+            
+        <div class="index-navbar-links">
+            <a href="#">Login</a>
+            <a href="#">Sign-up</a>
+            <a href="#">Abt us?</a>
+        </div>
+</div>
+
+<div class='index-custom-body'>
+    <p style="margin: 10px; text-align: center; align-items: flex-end;">
+    hey, this is just a little website that plans to help people maintain their goals, these goals could be mental, physical, anything really. Feel free to 
+    <a href="#">create an account</a>
+    and try it out
+    </p>
+</div>
+
+</html>
