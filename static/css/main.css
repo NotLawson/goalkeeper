@@ -3,7 +3,7 @@ body {
     overflow: hidden;  /* No scrolling */
     margin: 0;  /* attempt at making formating more standardised */
     display: flex;  /* I love flex */
-    flex-direction: column;  /* my formatting relies on it, so don't touch it */
+    flex-direction: column;  /* sorts divisions above each other (aka how my homepage works) */
     height: 100vh; /* full screen height */
 }
 
