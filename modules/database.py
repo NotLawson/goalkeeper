@@ -66,11 +66,11 @@ class Database:
                 password VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 online_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                applets ARRAY[],
+                applets TEXT[],
                 settings TEXT,
-                notifications ARRAY[],
-                tags ARRAY[],
-                friends INTEGER[] REFERENCES users(id),
+                notifications TEXT[],
+                tags TEXT[],
+                friends INTEGER[],
                 CONSTRAINT username_check CHECK (username ~ '^[a-zA-Z0-9_]+$'),
                 CONSTRAINT email_check CHECK (email ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
             );
@@ -112,7 +112,7 @@ class Database:
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS tasks (
                 id SERIAL PRIMARY KEY,
-                user_id INTEGER[] REFERENCES users(id),
+                user_id INTEGER[],
                 title VARCHAR(50) NOT NULL,
                 description TEXT,
                 applet VARCHAR(50) NOT NULL,

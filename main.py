@@ -24,6 +24,7 @@ config = Config('config.json')
 print("Config loaded!")
 
 # 2. Logging
+import logging as log
 if config.get("logging", "info") == "debug":
     level = log.DEBUG
 elif config.get("logging", "info") == "info":
@@ -41,7 +42,6 @@ print("Setting up logging...")
 import logging as log
 log.basicConfig(level=level, format='%(asctime)s - %(levelname)s - %(message)s')
 log.info("Logging initialized")
-
 
 # 3. Database module
 log.info("Loading database module...")
@@ -74,10 +74,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB limit for uploads
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # limit file types to images only
 log.info("Flask setup complete!")
 
-# Each section is split into its own file for better organization
-# The only section that is not split is the main server file, as it is the core section (JCI Core).
-
-# Core
+# 7. Core
 # JCI Core contains the base level stuff for the application. Accounts, notifications, goals, etc.
 # It also handles managing the applets, hence being on a different level to them.
 # How this works is that when someone requests and applet, it will contsruct the data, get a request ready, but then send it to core to be packaged into the app. 
@@ -107,10 +104,10 @@ class Core:
         head, body = self.separate_head_body(response)
 
         # Get user
-        auth
+        user = auth.auth(request)
 
         # Render the response with the applet data
-        return render_template("applet.html", content=body, head=head)   
+        return render_template("applet.html", content=body, head=head, user=user)   
 
     def separate_head_body(html_string):
         """
@@ -123,18 +120,10 @@ class Core:
         body_content = body_match.group(1).strip() if body_match else None
 
         return head_content, body_content
-
     
+core = Core(app, [])
+    
+# 8. Applets
+from applets import * # import all applets
 
-
-@app.route('/')
-def index():
-    """
-    Main page of the application.
-    :return: Rendered template of the main page.
-    """
-    resp = render_template('index.html')
-    core = Core(applets = [])
-    return core.render(resp)
-
-app.run(port=5000, debug=True)
+app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)

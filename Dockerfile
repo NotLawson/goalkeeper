@@ -1,4 +1,4 @@
-FROM python3.11-slim
+FROM python:3.11-slim
 LABEL maintainer="@NotLawson and @MitchExists"
 LABEL description="A Docker image for the server file in this repository."
 

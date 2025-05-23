@@ -27,7 +27,7 @@ class Config:
         Check if the configuration file is valid.
         :return: True if the configuration file is valid, False otherwise.
         """
-        required_keys = ['database', 'logging', 'secret_key']
+        required_keys = ['database', 'logging', 'secret_key', 'port']
         for key in required_keys:
             if key not in self.config:
                 return False

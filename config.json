@@ -7,5 +7,6 @@
         "database": "postgres"
     },
     "logging": "debug",
-    "secret_key": "SUPER_SECRET_KEY"
+    "secret_key": "SUPER_SECRET_KEY",
+    "port": 8080
 }
