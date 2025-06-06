@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('general_home.html')
+    return render_template('Testing/index.html', variable='words')
 
 app.run(debug=True)
