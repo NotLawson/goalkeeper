@@ -3,6 +3,8 @@
 services:
   app:
     build: .
+    depends_on:
+      - postgres
     # Todo: Finish this
     ports:
       - 8080:8080
