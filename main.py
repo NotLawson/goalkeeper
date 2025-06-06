@@ -93,7 +93,7 @@ class Core:
         :param url: The URL to register the page at.
         :param methods: The HTTP methods to allow for this page.
         """
-        app.add_url_rule(url, view_func=lambda: self.render(function), methods=methods)
+        app.add_url_rule("/applet"+url, view_func=lambda **kwargs: self.render(function(**kwargs)), methods=methods)
     
     def render(self, response):
         """
@@ -107,7 +107,7 @@ class Core:
         user = auth.auth(request)
 
         # Render the response with the applet data
-        return render_template("applet.html", content=body, head=head, user=user)   
+        return render_template("render.html", content=body, head=head, user=user)   
 
     def separate_head_body(html_string):
         """
