@@ -6,4 +6,4 @@ from __main__ import core
 def nut_main():
     return 'it works kinda'
 
-core.register_page(mental_main, '/nutritional')
+core.register_page(nut_main, '/nutritional')

@@ -6,4 +6,4 @@ from __main__ import core
 def physical_main():
     return 'it works kinda'
 
-core.register_page(mental_main, '/mental')
+core.register_page(physical_main, '/physical')
