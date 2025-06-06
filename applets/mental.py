@@ -5,6 +5,6 @@ from __main__ import core
 
 # applet function
 def mental_main():
-    return 'I am hard'
+    return 'it works kinda'
 
 core.register_page(mental_main, '/mental')

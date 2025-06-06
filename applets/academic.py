@@ -28,7 +28,7 @@ def index():
     # Render the index page
     return render_template("academic/index.html", user_data=user_data)
 
-core.register_page(index, "/applet/academic", methods=["GET"])
+core.register_page(index, "/academic", methods=["GET"])
 
 
 log.info("Academic Wellbeing applet loaded!")
