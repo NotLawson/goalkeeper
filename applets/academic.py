@@ -7,26 +7,17 @@ base = "academic"
 
 # Applet
 from flask import render_template, abort
+import datetime, random
 
 from __main__ import app, database, core, log
 log.info("Academic Wellbeing applet loading...")
 
-def index():
+def index(path):
     """
     Index page for the Academic Wellbeing applet.
     """
-    # Get the user id from the session
-    user_id = core.get_user_id()
-    if not user_id:
-        return abort(401)
-
-    # Get the user data from the database
-    user_data = db.get_user_data(user_id)
-    if not user_data:
-        return abort(404)
-
     # Render the index page
-    return render_template("academic/index.html", user_data=user_data)
+    return render_template("academic/index.html", time=datetime.datetime.now().strftime("%H:%M:%S"), random_number=random.randint(1, 100), path=path)
 
 core.register_page(index, "/academic", methods=["GET"])
 
