@@ -5,6 +5,6 @@ from __main__ import core
 
 # applet function
 def physical_main():
-    return render_template('/physical.html')
+    return render_template('physical.html')
 
 core.register_page(physical_main, '/physical')
