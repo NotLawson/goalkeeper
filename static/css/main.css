@@ -77,11 +77,9 @@ a:hover {
 
 /* navigation bar overlayed on top of the webpage using base.html */
 .base-nav {
-    display: flex;
-    justify-content: center;
     align-items: center;
     height: 60px;
-    background-color: #222; /* Example color */
+    background-color: #888; /* Example color */
     color: white;
     position: sticky;
     bottom: 0;
@@ -89,10 +87,18 @@ a:hover {
 }
 
 .base-nav-buttons {
-    height: 100%;
-    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.base-nav-buttons > button {
+    height: 312%;
     align-items: center;
-    display: flex;
+    border: none;
+}
+
+.base-nav-buttons > button:hover {
+    background-color:#666;
 }
 
 /* the body of the homepage */
