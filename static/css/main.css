@@ -61,6 +61,21 @@ a:hover {
     padding-right: 18px; /* looks nice ig */
 }
 
+/* the object that the navbar is flex-ending */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* the space for the page contents underneath the base page */
+.page_content {
+    display: flex;
+    height: 100%;
+}
+
+/* navigation bar overlayed on top of the webpage using base.html */
 .base-nav {
     display: flex;
     justify-content: center;
@@ -77,6 +92,7 @@ a:hover {
     height: 100%;
     padding: 0 20px;
     align-items: center;
+    display: flex;
 }
 
 /* the body of the homepage */
