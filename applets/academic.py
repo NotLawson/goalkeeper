@@ -17,7 +17,7 @@ def index(path):
     Index page for the Academic Wellbeing applet.
     """
     # Render the index page
-    return render_template("academic/index.html", time=datetime.datetime.now().strftime("%H:%M:%S"), random_number=random.randint(1, 100), path=path)
+    return render_template("academic.html", time=datetime.datetime.now().strftime("%H:%M:%S"), random_number=random.randint(1, 100), path=path)
 
 core.register_page(index, "/academic", methods=["GET"])
 
