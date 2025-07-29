@@ -95,10 +95,21 @@ a:hover {
     height: 312%;
     align-items: center;
     border: none;
+    border-bottom: 3px solid transparent;
 }
 
 .base-nav-buttons > button:hover {
     background-color:#666;
+}
+
+.base-nav-buttons > button:active {
+    background-color:#222;
+    transform: scale(0.98);
+}
+
+.base-nav-buttons > button.selected {
+    background-color:#444;
+    border-bottom: 3px solid #f4bc77;
 }
 
 /* the body of the homepage */
