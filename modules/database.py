@@ -38,8 +38,6 @@ class Database:
         # - applets: List of applets the user has access to.
         #   - mental: The mental health applet
         #   - physical: The physical health applet
-        #   - nurtition: The nutrition applet
-        #   - academic: The academic applet
         # - settings: The JSON Settings object for the user. See the section at the bottom of this file for more information.
         # - notifications: A list of all notifications this user has received.
         #   - id: Unique identifier for each notification
@@ -129,5 +127,8 @@ class Database:
         # Execute a query on the database
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
+    def execute_command(self, command, params=()):
+        # Execute a command on the database
+        self.cursor.execute(command, params)
     
 
