@@ -16,6 +16,7 @@ print("Welcome to JCI!")
 
 # 0. Base libraries
 import os, sys, time, json, datetime, re, random, string, base64, hashlib, binascii, uuid
+import requests, importlib
 
 # 1. Config module
 print("Loading config...")
@@ -82,32 +83,63 @@ log.info("Flask setup complete!")
 # The logic for this is contained in this file, as the function below.
 # This class is used by the main server, and then the resulting object is imported by the applets via __main__
 class Core:
-    def __init__(self, app, applets: list):
+    def __init__(self, app):
         self.app = app
-        self.applets = applets # List containing the applet objects. This is used to get names, url bases etc.
+
+        import applets
+        self.applets = applets.__all__ # List containing the applet objects. This is used to get names, url bases etc.
+
+        # load applets
     
-    def register_page(self, function, url, methods=["GET"]):
+    def load_applets(self):
+        for applet in self.applets:
+            log.info(f"Loading applet: {applet}")
+            module = importlib.import_module(f"applets.{applet}")
+            try:
+                info = module.info()
+                log.info(f"Applet loaded: {info['name']}")
+                log.info(f"Applet URL: {info['url']}")
+            except Exception as e:
+                log.error(f"Error loading applet {applet}: {e}")
+                continue
+            try: 
+                setup = module.init()
+                for page in setup["pages"]:
+                    self.register_page(page["function"], page["matcher"], page.get("methods", ["GET"]))
+            except Exception as e:
+                log.error(f"Error initializing applet {info['name']}: {e}")
+                continue
+                    
+
+    def register_page(self, function, config, url, methods=["GET"]):
         """
         Register a page with the applet.
         :param function: The function to call when the page is requested.
         :param url: The URL to register the page at.
         :param methods: The HTTP methods to allow for this page.
         """
-        app.add_url_rule("/applet"+url, view_func=lambda **kwargs: self.render(function(**kwargs)), methods=methods)
-    
-    def render(self, response):
+        app.add_url_rule(url, view_func=lambda **kwargs: self.render(function, kwargs)), methods=methods)
+
+    def render(self, function, config, kwargs=None):
         """
         Render the response with the applet data.
         :param response: The response to render. Should be the result of a render_template call, or a string containing HTML.
         :return: The rendered response.
         """
-        head, body = self.separate_head_body(response)
-
+            
         # Get user
         user = auth.auth(request)
+        if not user:
+            return redirect("/login")
 
+        # Get user tasks
+        user_tasks = database.get_user_tasks(user["id"])
+            
+        response = function(user, **kwargs) if kwargs else function(user)
+
+        head, body = self.separate_head_body(response)
         # Render the response with the applet data
-        return render_template("render.html", content=body, head=head, user=user)   
+        return render_template("render.html", content=body, head=head, user=user, tasks=user_tasks)
 
     def separate_head_body(html_string):
         """
@@ -122,8 +154,5 @@ class Core:
         return head_content, body_content
     
 core = Core(app, [])
-    
-# 8. Applets
-from applets import * # import all applets
 
 app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)
