@@ -105,7 +105,6 @@ a:hover {
 }
 
 .base-nav-buttons > button:active {
-    background-color:#222;
     transform: scale(0.98);
 }
 
