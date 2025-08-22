@@ -88,8 +88,10 @@ class Core:
 
         import applets
         self.applets = applets.__all__ # List containing the applet objects. This is used to get names, url bases etc.
+        app.logger.info(f"Applets: {self.applets}")
 
         # load applets
+        self.load_applets()
     
     def load_applets(self):
         for applet in self.applets:
@@ -105,25 +107,29 @@ class Core:
             try: 
                 setup = module.init()
                 for page in setup["pages"]:
-                    self.register_page(page["function"], page["matcher"], page.get("methods", ["GET"]))
+                    log.info(f"Registering page: {page['matcher']} for applet {info['name']} at {info['url'] + page['matcher']}")
+                    self.register_page(function=page["function"], url=(info["url"] + page["matcher"]), methods=page.get("methods", ["GET"]))
             except Exception as e:
                 log.error(f"Error initializing applet {info['name']}: {e}")
                 continue
                     
-
-    def register_page(self, function, config, url, methods=["GET"]):
+    def register_page(self, function, url, methods=["GET"]):
         """
         Register a page with the applet.
         :param function: The function to call when the page is requested.
         :param url: The URL to register the page at.
         :param methods: The HTTP methods to allow for this page.
         """
-        app.add_url_rule(url, view_func=lambda **kwargs: self.render(function, kwargs)), methods=methods)
-
-    def render(self, function, config, kwargs=None):
+        app.add_url_rule(
+            url,
+            url,
+            lambda **kwargs: self.render(function, kwargs),
+            methods
+        )
+    def render(self, function, kwargs=None):
         """
         Render the response with the applet data.
-        :param response: The response to render. Should be the result of a render_template call, or a string containing HTML.
+        :param response: The resp6onse to render. Should be the result of a render_template call, or a string containing HTML.
         :return: The rendered response.
         """
             
@@ -133,8 +139,9 @@ class Core:
             return redirect("/login")
 
         # Get user tasks
-        user_tasks = database.get_user_tasks(user["id"])
-            
+        #user_tasks = database.get_user_tasks(user["id"])
+        user_tasks = []  # Placeholder for user tasks, as the database module is not fully implemented yet.
+
         response = function(user, **kwargs) if kwargs else function(user)
 
         head, body = self.separate_head_body(response)
@@ -153,6 +160,6 @@ class Core:
 
         return head_content, body_content
     
-core = Core(app, [])
+core = Core(app)
 
 app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)

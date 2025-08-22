@@ -1,11 +1,37 @@
-# Mental Applet
-
-# flask is pretty important for a flask applet
-from __main__ import core
+# Mental applet
 from flask import render_template
+#from __main__ import database, log
 
-# applet function
-def mental_main():
-    return render_template("mental.html", title="Mental Wellbeing", description="A space to focus on mental health and wellbeing.")
+## Pages
+# Main Page
+def index(user):
+    """
+    Index page as an example.
+    """
+    return render_template("mental.html")
 
-core.register_page(mental_main, '/mental')
+
+# Init function
+def init():
+    """Initialize the applet."""
+
+    return {
+        "pages": [
+            {
+                "matcher": "/",
+                "function": index,
+                "methods": ["GET"]
+            }
+        ]
+    }
+## Info function
+def info():
+    """
+    Example applet info.
+    """
+    return {
+        "name": "Mental Applet",
+        "description": "This is the mental applet.",
+        "url": "/mental"
+    }
+    

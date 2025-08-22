@@ -4,7 +4,7 @@ from flask import render_template
 
 ## Pages
 # Main Page
-def index():
+def index(user):
     """
     Index page as an example.
     """
