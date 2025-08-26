@@ -1,6 +1,6 @@
 # Database module
 # This module contains the Database class to handle to the postgres database.
-import psycopg2
+import psycopg2, time
 
 
 class Database:
@@ -10,13 +10,19 @@ class Database:
         self.password = password
         self.host = host
         self.port = port
-        self.connection = psycopg2.connect(
-            dbname=self.dbname,
-            user=self.user,
-            password=self.password,
-            host=self.host,
-            port=self.port
-        )
+        while True:
+            try:
+                self.connection = psycopg2.connect(
+                    dbname=self.dbname,
+                    user=self.user,
+                    password=self.password,
+                    host=self.host,
+                    port=self.port
+                )
+                break
+            except Exception as e:
+                print(f"Error connecting to database: {e}")
+                time.sleep(5)
         self.connection.autocommit = True
         self.cursor = self.connection.cursor()
         self.init_tables()

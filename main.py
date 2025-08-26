@@ -129,7 +129,7 @@ class Core:
     def render(self, function, kwargs=None):
         """
         Render the response with the applet data.
-        :param response: The resp6onse to render. Should be the result of a render_template call, or a string containing HTML.
+        :param response: The response to render. Should be the result of a render_template call, or a string containing HTML.
         :return: The rendered response.
         """
             
@@ -148,7 +148,7 @@ class Core:
         # Render the response with the applet data
         return render_template("render.html", content=body, head=head, user=user, tasks=user_tasks)
 
-    def separate_head_body(html_string):
+    def separate_head_body(self, html_string):
         """
         Separates the head and body sections from an HTML string.
         """
