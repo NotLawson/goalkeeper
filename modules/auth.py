@@ -1,11 +1,11 @@
 # Auth module for handling user authentication and authorization
-import os, sys, time, json, datetime
-
+import os, sys, time, json, datetime, hashlib, hmac
+import psycopg2.errors as db_errors
 class Authentication:
     def __init__(self, db):
         self.db = db
 
-    def register_user(self, username, password_hash, email, dob, fname, lname, tags = ["user"], applets = [], settings = None):
+    def register_user(self, username, password, email, name, tags = ["user"]):
         """
         Register a new user in the database.
         :param username: The username of the user.
@@ -13,16 +13,37 @@ class Authentication:
         :param email: The email of the user.
         :return: True if the user was registered successfully, False and the error otherwise.
         """
-        if settings == None:
-            settings = {
-                "theme":"default",
-            }
         try:
-            self.db.execute_query("INSERT INTO users (username, password, email, dob, fname, lname, tags, applets, settings) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (username, password_hash, email, dob, fname, lname, tags, applets, json.dump(settings)))
-            return True, "User registered successfully"
+            password_hash, salt = hash_new_password(password)
+
+            self.db.execute_command("INSERT INTO users (username, password, email, name, tags, settings) VALUES (%s, %s, %s, %s, %s, %s)", (username, password_hash, email, name, tags, "{}"))
+            return True
+        except db_errors.UniqueViolation:
+            return False, "Username or email already exists"
         except Exception as e:
             return False, f"Error registering user: {e}"
-    
+
+    def login(self, username, password):
+        """
+        Login a user.
+        :param username: The username of the user.
+        :param password: The password of the user.
+        :return: True and a token if the user was logged in successfully, False and the error otherwise.
+        """
+        try:
+            user = self.db.execute_query("SELECT password, salt FROM users WHERE username = %s", (username,))[0]
+            if is_correct_password(bytes.fromhex(user[1]), bytes.fromhex(user[0]), password):
+                token = self.create_token(self.db.execute_query("SELECT id FROM users WHERE username = %s", (username,))[0][0])
+                if token:
+                    return True, token
+                else:
+                    return False, "Error creating token"
+            else:
+                return False, "Invalid password"
+
+        except IndexError:
+            return False, "User not found"
+
     def create_token(self, user_id, name=None):
         """
         Create a new token for the user.
@@ -66,23 +87,7 @@ class Authentication:
             return True
         except Exception as e:
             return False, f"Error renaming token: {e}"
-        
-    def login(self, username, password_hash):
-        """
-        Login a user.
-        :param username: The username of the user.
-        :param password: The password of the user.
-        :return: True and a token if the user was logged in successfully, False and the error otherwise.
-        """
-        try:
-            self.db.execute_query("SELECT * FROM users WHERE username = %s AND password = %s", (username, password_hash))
-            user = self.db.cursor.fetchone()
-            if user == None:
-                return False, "Invalid username or password"
-            token = self.create_token(user[0])
-            return True, token
-        except Exception as e:
-            return False, f"Error logging in: {e}"
+            
         
     def authenticate(self, token):
         """       
@@ -104,7 +109,7 @@ class Authentication:
             return False, f"Error authenticating token: {e}"
         
 
-    def auth(self, request):
+    def __run__(self, request):
         """
         Authenticate a user using a token from the request.
         :param request: The request to authenticate with.
@@ -117,7 +122,22 @@ class Authentication:
             return False, "No token provided"
         return self.authenticate(token)
     
+# Directly from https://stackoverflow.com/questions/9594125/salt-and-hash-a-password-in-python
+def hash_new_password(password: str) -> tuple[bytes, bytes]:
+    """
+    Hash the provided password with a randomly-generated salt and return the
+    salt and hash to store in the database.
+    """
+    salt = os.urandom(16)
+    pw_hash = hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    return salt, pw_hash
 
-    
-
-    
+def is_correct_password(salt: bytes, pw_hash: bytes, password: str) -> bool:
+    """
+    Given a previously-stored salt and hash, and a password provided by a user
+    trying to log in, check whether the password is correct.
+    """
+    return hmac.compare_digest(
+        pw_hash,
+        hashlib.pbkdf2_hmac('sha256', password.encode(), salt, 100000)
+    )

@@ -35,22 +35,18 @@ class Database:
         # - id: Unique identifier for each user
         # - username: Unique username for each user
         # - email: Unique email for each user
-        # - first_name: First name of the user
-        # - last_name: Last name of the user
-        # - date_of_birth: Date of birth of the user
+        # - name: User name
         # - password: Hashed password for each user
+        # - salt: Salt used for hashing the password
         # - created_at: Timestamp of when the user was created
         # - online_at: Timestamp of when the user was last online.
-        # - applets: List of applets the user has access to.
-        #   - mental: The mental health applet
-        #   - physical: The physical health applet
         # - settings: The JSON Settings object for the user. See the section at the bottom of this file for more information.
         # - notifications: A list of all notifications this user has received.
         #   - id: Unique identifier for each notification
         #   - title: Title of the notification
         #   - message: Message of the notification
         #   - created_at: Timestamp of when the notification was created
-        #   - action: The action to take when the notification is clicked
+        #   - action: The url to navigate to when the notification is clicked
         # - tags: A list of tags for the user. This is used to allow special permissions for certain users.
         #   - user: Standard account. Grants access to the Core Applet and standard features.
         #   - admin: Admin account. Grants access to the Admin Panel and related features. Visual Tag in the UI.
@@ -63,20 +59,16 @@ class Database:
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
                 username VARCHAR(50) UNIQUE NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                first_name VARCHAR(50),
-                last_name VARCHAR(50),
-                date_of_birth TIMESTAMP,
-                password VARCHAR(255) NOT NULL,
+                email VARCHAR(100) UNIQUE,
+                name VARCHAR(100) NOT NULL,
+                password BYTEA NOT NULL,
+                salt BYTEA NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 online_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                applets TEXT[],
                 settings TEXT,
                 notifications TEXT[],
-                tags TEXT[],
-                friends INTEGER[],
-                CONSTRAINT username_check CHECK (username ~ '^[a-zA-Z0-9_]+$'),
-                CONSTRAINT email_check CHECK (email ~ '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+                tags TEXT[] NOT NULL,
+                friends INTEGER[]
             );
         """)
 
@@ -94,38 +86,65 @@ class Database:
                 name VARCHAR(50)
             );
         """)
-        
+
+        # Goals Table
+        # This table stores the all goals
+        # - id: ID for the goal
+        # - user_id: ID of the user who owns the task
+        # - title: Title of the goal
+        # - description: Description of the goal
+        # - created_at: The timestamp of when the goal was created.
+        # - stage: The current stage of the goal (1, 2, 3)
+        # - config: JSON configuration for the goal
+        #  - stages: List of stages for the goal
+        #   - id: ID for the stage. e.g. Stage 1 would be 1, Stage 2 would be 2
+        #   - title: Title of the stage. Defaults to none, where "Stage" plus the stage ID will be used instead (e.g. Stage 1)
+        #   - description: Description of the stage.
+        #   - tasks: List of tasks for the stage.
+        #     - title: Title of the task.
+        #     - description: Description of the task.
+        #     - type: Type of task, can be daily, weekly or monthly
+        #     - optional: Whether the task is optional or not.
+        #   - milestone: The milestone associated with the stage.
+        #   - duration: The duration of the stage in weeks. Will be used when deciding the timeline for the goal.
+        # - created_from: ID of the Marketplace item the goal was created from.
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS goals (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                title VARCHAR(100) NOT NULL,
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                stage INTEGER DEFAULT 1,
+                config TEXT,
+                created_from INTEGER
+            );
+        """)
+
         # Tasks Table
-        # This table stores the tasks for each user.
-        # - id: Unique identifier for each task
-        # - user_id: The ID of the user this task belongs to. This is an array in case the task is shared between users.
-        # - title: The title of the task
-        # - description: The description of the task
-        # - applet: The applet this task belongs to. This is used to filter tasks by applet.
-        # - due: The timestamp the task is due.
-        # - status: The status of the task.
-        #   - not_started: The task has not been started yet.
-        #   - in_progress: The task is in progress.
-        #   - completed: The task has been completed.
-        #   - failed: The task has been failed.
-        #   - cancelled: The task has been cancelled.
+        # This table stores all tasks for goals
+        # - id: ID of the task
+        # - goal_id: ID of the goal this task belongs to
+        # - title: Title of the task
+        # - description: Description of the task
         # - created_at: The timestamp of when the task was created.
-        # - conditions: The conditions for the task. This is a JSON object that contains the conditions for the task.
-        # - data: The data for the task. This is a JSON object that contains the data for the task.
-        # - config: The config for the task. This is a JSON object that contains the config for the task. This is set and read by the applet to track progress.
+        # - due_date: The timestamp of when the task is due.
+        # - status: The current status of the task (e.g. incomplete, complete, missed)
+        # - optional: Whether the task is optional or not.
+        # - milestone: Whether the task is a milestone or not.
+        # - ultimate: Whether the task is the ultimate goal or not.
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS tasks (
                 id SERIAL PRIMARY KEY,
-                user_id INTEGER[],
-                title VARCHAR(50) NOT NULL,
+                goal_id INTEGER REFERENCES goals(id),
+                title VARCHAR(100) NOT NULL,
                 description TEXT,
-                applet VARCHAR(50) NOT NULL,
-                due TIMESTAMP,
-                status VARCHAR(20) DEFAULT 'not_started',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                conditions TEXT,
-                data TEXT,
-                config TEXT
+                due_date TIMESTAMP,
+                status VARCHAR(20) DEFAULT 'incomplete',
+                optional BOOLEAN DEFAULT FALSE,
+                milestone BOOLEAN DEFAULT FALSE,
+                ultimate BOOLEAN DEFAULT FALSE
             );
         """)
 
