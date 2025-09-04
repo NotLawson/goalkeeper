@@ -109,7 +109,7 @@ class Authentication:
             return False, f"Error authenticating token: {e}"
         
 
-    def __run__(self, request):
+    def __call__(self, request):
         """
         Authenticate a user using a token from the request.
         :param request: The request to authenticate with.

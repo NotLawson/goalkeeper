@@ -73,8 +73,80 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB limit for uploads
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # limit file types to images only
 log.info("Flask setup complete!")
 
-@
-
-
 
 app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)
+
+## Website Structure
+# Accounts
+#  - Login (/accounts/login)
+#  - Register (/accounts/register)
+#  - Logout (/accounts/logout)
+#  - My Account (/accounts/me)
+# My
+#  - Dashboard (/my/dashboard)
+#  - Profile (/my/profile)
+#  - Goals (/my/goals)
+#  - Tasks (/my/tasks)
+#  - Create Goal (/my/goals/create)
+#  - Edit Goal (/my/goals/edit/<goal_id>)
+# Misc
+#  - Index (/)
+#  - About (/about)
+# Admin
+#  - Dashboard (/admin/dashboard)
+#  - Users (/admin/users)
+#  - Goals (/admin/goals)
+#  - Tasks (/admin/tasks)
+
+# Accounts
+
+# Login (/accounts/login)
+@app.route('/accounts/login', methods=['GET', 'POST'])
+def login():
+    if auth(request)[0]:
+        return redirect(request.args.get('next', '/my/dashboard'))
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        success, token = auth.login(username, password)
+        if success:
+            resp = make_response(redirect(request.args.get('next', '/my/dashboard')))
+            resp.set_cookie('token', token)
+            return resp
+        else:
+            return render_template('login.html', error=token)
+
+    return render_template('login.html')
+
+# Register (/accounts/register)
+@app.route('/accounts/register', methods=['GET', 'POST'])
+def register():
+    if auth(request)[0]:
+        return redirect('/my/dashboard')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        name = request.form.get('name')
+        success, msg = auth.register_user(username, password, email, name)
+        if success:
+            _, token = auth.login(username, password)
+            resp = make_response(redirect('/my/dashboard'))
+            resp.set_cookie('token', token)
+            return resp
+        else:
+            return render_template('register.html', error=msg)
+
+    return render_template('register.html')
+
+# Logout (/accounts/logout)
+@app.route('/accounts/logout')
+def logout():
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', expires=0)
+    return resp
+
+# My Account (/accounts/me)
+@app.route('/accounts/me')
+def my_account():
+    return render_template('misc_notbuilt.html')
