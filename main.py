@@ -11,8 +11,6 @@ print("Welcome to JCI!")
 # 4. Auth module
 # 5. File manager module
 # 6. Flask
-# 7. Core
-# 8. Applets
 
 # 0. Base libraries
 import os, sys, time, json, datetime, re, random, string, base64, hashlib, binascii, uuid
@@ -75,91 +73,80 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB limit for uploads
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # limit file types to images only
 log.info("Flask setup complete!")
 
-# 7. Core
-# JCI Core contains the base level stuff for the application. Accounts, notifications, goals, etc.
-# It also handles managing the applets, hence being on a different level to them.
-# How this works is that when someone requests and applet, it will contsruct the data, get a request ready, but then send it to core to be packaged into the app. 
-# This allows the applets to work independently from each other whilst still including sidebars, notification, and other HUD elements.
-# The logic for this is contained in this file, as the function below.
-# This class is used by the main server, and then the resulting object is imported by the applets via __main__
-class Core:
-    def __init__(self, app):
-        self.app = app
-
-        import applets
-        self.applets = applets.__all__ # List containing the applet objects. This is used to get names, url bases etc.
-        app.logger.info(f"Applets: {self.applets}")
-
-        # load applets
-        self.load_applets()
-    
-    def load_applets(self):
-        for applet in self.applets:
-            log.info(f"Loading applet: {applet}")
-            module = importlib.import_module(f"applets.{applet}")
-            try:
-                info = module.info()
-                log.info(f"Applet loaded: {info['name']}")
-                log.info(f"Applet URL: {info['url']}")
-            except Exception as e:
-                log.error(f"Error loading applet {applet}: {e}")
-                continue
-            try: 
-                setup = module.init()
-                for page in setup["pages"]:
-                    log.info(f"Registering page: {page['matcher']} for applet {info['name']} at {info['url'] + page['matcher']}")
-                    self.register_page(function=page["function"], url=(info["url"] + page["matcher"]), methods=page.get("methods", ["GET"]))
-            except Exception as e:
-                log.error(f"Error initializing applet {info['name']}: {e}")
-                continue
-                    
-    def register_page(self, function, url, methods=["GET"]):
-        """
-        Register a page with the applet.
-        :param function: The function to call when the page is requested.
-        :param url: The URL to register the page at.
-        :param methods: The HTTP methods to allow for this page.
-        """
-        app.add_url_rule(
-            url,
-            url,
-            lambda **kwargs: self.render(function, kwargs),
-            methods
-        )
-    def render(self, function, kwargs=None):
-        """
-        Render the response with the applet data.
-        :param response: The response to render. Should be the result of a render_template call, or a string containing HTML.
-        :return: The rendered response.
-        """
-            
-        # Get user
-        user = auth.auth(request)
-        if not user:
-            return redirect("/login")
-
-        # Get user tasks
-        #user_tasks = database.get_user_tasks(user["id"])
-        user_tasks = []  # Placeholder for user tasks, as the database module is not fully implemented yet.
-
-        response = function(user, **kwargs) if kwargs else function(user)
-
-        head, body = self.separate_head_body(response)
-        # Render the response with the applet data
-        return render_template("render.html", content=body, head=head, user=user, tasks=user_tasks)
-
-    def separate_head_body(self, html_string):
-        """
-        Separates the head and body sections from an HTML string.
-        """
-        head_match = re.search(r"<head>(.*?)</head>", html_string, re.IGNORECASE | re.DOTALL)
-        body_match = re.search(r"<body[^>]*>(.*?)</body>", html_string, re.IGNORECASE | re.DOTALL)
-
-        head_content = head_match.group(1).strip() if head_match else None
-        body_content = body_match.group(1).strip() if body_match else None
-
-        return head_content, body_content
-    
-core = Core(app)
 
 app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)
+
+## Website Structure
+# Accounts
+#  - Login (/accounts/login)
+#  - Register (/accounts/register)
+#  - Logout (/accounts/logout)
+#  - My Account (/accounts/me)
+# My
+#  - Dashboard (/my/dashboard)
+#  - Profile (/my/profile)
+#  - Goals (/my/goals)
+#  - Tasks (/my/tasks)
+#  - Create Goal (/my/goals/create)
+#  - Edit Goal (/my/goals/edit/<goal_id>)
+# Misc
+#  - Index (/)
+#  - About (/about)
+# Admin
+#  - Dashboard (/admin/dashboard)
+#  - Users (/admin/users)
+#  - Goals (/admin/goals)
+#  - Tasks (/admin/tasks)
+
+# Accounts
+
+# Login (/accounts/login)
+@app.route('/accounts/login', methods=['GET', 'POST'])
+def login():
+    if auth(request)[0]:
+        return redirect(request.args.get('next', '/my/dashboard'))
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        success, token = auth.login(username, password)
+        if success:
+            resp = make_response(redirect(request.args.get('next', '/my/dashboard')))
+            resp.set_cookie('token', token)
+            return resp
+        else:
+            return render_template('login.html', error=token)
+
+    return render_template('login.html')
+
+# Register (/accounts/register)
+@app.route('/accounts/register', methods=['GET', 'POST'])
+def register():
+    if auth(request)[0]:
+        return redirect('/my/dashboard')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        email = request.form.get('email')
+        name = request.form.get('name')
+        success, msg = auth.register_user(username, password, email, name)
+        if success:
+            _, token = auth.login(username, password)
+            resp = make_response(redirect('/my/dashboard'))
+            resp.set_cookie('token', token)
+            return resp
+        else:
+            return render_template('register.html', error=msg)
+
+    return render_template('register.html')
+
+# Logout (/accounts/logout)
+@app.route('/accounts/logout')
+def logout():
+    resp = make_response(redirect('/'))
+    resp.set_cookie('token', '', expires=0)
+    return resp
+
+# My Account (/accounts/me)
+@app.route('/accounts/me')
+def my_account():
+    return render_template('misc_notbuilt.html')

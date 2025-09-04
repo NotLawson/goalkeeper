@@ -5,7 +5,7 @@ LABEL description="A Docker image for the server file in this repository."
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements file into the container and install dependencies
+# Copy the requirements filintoe  the container and install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
