@@ -9,6 +9,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
     </head>
     <body>
+        <div class="heading">
+            {% block heading %}
+            {% endblock %}
+        </div>
+
         <div class="container">
             <div class="page_content">    
                 {% block body %}
@@ -16,12 +21,10 @@
             </div>
 
             <div class="base-nav">
-                <div class="base-nav-buttons">
-                    <button onclick="window.location.href = '/my/dashboard'">Home</button>
-                    <button onclick="window.location.href = '/my/goals'">Goals</button>
-                    <button onclick="window.location.href = '/my/tasks'">Tasks</button>
-                    <button onclick="window.location.href = '/account/me'">Me</button>
-                </div>
+                <button onclick="window.location.href = '/my/dashboard'">Home</button>
+                <button onclick="window.location.href = '/my/tasks'">Tasks</button>
+                <button onclick="window.location.href = '/my/goals'">Goals</button>
+                <button onclick="window.location.href = '/account/me'">Me</button>
             </div>
         </div>
 

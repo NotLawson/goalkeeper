@@ -1,0 +1,67 @@
+{% extends "misc_base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block heading %}
+<div>
+    <h1>Hi there, {{user[3]}}</h1>
+</div>
+{% endblock %}
+
+{% block body %}
+<div id="goals" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
+    <h2>Your Goals</h2>
+    <div class="dbitem">
+        {% set i = 0 %}
+        {% if goals %}
+            {% for goal in goals %}
+            <div>
+                <p>{{goal[2]}}<br><progress value="{{((goal[5] / len(goal[6]['stages'])) * 100) }}" max="100"></progress></p>
+                <p>{{goal[3]}}</p>
+            </div>
+            {% set i = i + 1 %}
+            {% if i >= 3 %}
+                {% break %}
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+<div id="tasks" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
+    <h2>Your Tasks</h2>
+    <div class="dbitem">
+        <div>
+            <p>Task 1</p>
+            <p>Description for Task 1</p>
+            <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
+                <button>Complete</button>
+                <button>Skip</button>
+            </div>
+            <br>
+        </div>
+        <div>
+            <p>Task 2</p>
+            <p>Description for Task 2</p>
+            <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
+                <button>Complete</button>
+                <button>Skip</button>
+            </div>
+            <br>
+        </div>
+        <div>
+            <p>Task 3</p>
+            <p>Description for Task 3</p>
+            <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
+                <button>Complete</button>
+                <button>Skip</button>
+            </div>
+            <br>
+        </div>
+    </div>
+</div>
+<div id="social" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
+    <h2>Friends</h2>
+    <div class="dbitem">
+        <p>Nothing to see here...</p>
+    </div>
+</div>
+{% endblock %}

@@ -69,44 +69,63 @@ a:hover {
     width: 100vw;
 }
 
+.heading {
+    text-align: center;
+
+}
+
 /* the space for the page contents underneath the base page */
 .page_content {
+    height: 100%;
+    text-align: center;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+/* 3grid layout for dashboard items */
+.dbitem {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+.dbitem > div {
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 30%;
     height: 100%;
 }
 
 /* navigation bar overlayed on top of the webpage using base.html */
 .base-nav {
     align-items: center;
-    height: 60px;
+    height: 15%;
     background-color: #888; /* Example color */
     color: white;
     position: sticky;
     bottom: 0;
     z-index: 1000;
-}
-
-.base-nav-buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 }
 
-.base-nav-buttons > button {
-    height: 312%;
+.base-nav > button {
     align-items: center;
-    border: none;
-    border-bottom: 3px solid transparent;
+    border: 1px solid black;
+    height: 100%;
 }
 
-.base-nav-buttons > button:hover {
+.base-nav > button:hover {
     background-color:#666;
 }
 
-.base-nav-buttons > button:active {
+.base-nav > button:active {
     transform: scale(0.98);
 }
 
-.base-nav-buttons > button.selected {
+.base-nav > button.selected {
     background-color:#444;
     border-bottom: 3px solid #f4bc77;
 }

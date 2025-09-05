@@ -73,6 +73,17 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB limit for uploads
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # limit file types to images only
 log.info("Flask setup complete!")
 
+@app.context_processor
+def inject_global_variables():
+    return dict(
+        datetime=datetime,
+        int=int,
+        str=str,
+        len=len,
+        enumerate=enumerate,
+        round=round
+    )
+
 ## Website Structure
 # Accounts
 #  - Login (/accounts/login)
