@@ -73,9 +73,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16MB limit for uploads
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'} # limit file types to images only
 log.info("Flask setup complete!")
 
-
-app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)
-
 ## Website Structure
 # Accounts
 #  - Login (/accounts/login)
@@ -101,7 +98,7 @@ app.run(host="0.0.0.0", port=int(config.get("port", 8080)), debug=False)
 # Accounts
 
 # Login (/accounts/login)
-@app.route('/accounts/login', methods=['GET', 'POST'])
+@app.route('/account/logins/', methods=['GET', 'POST'])
 def login():
     if auth(request)[0]:
         return redirect(request.args.get('next', '/my/dashboard'))
@@ -114,9 +111,9 @@ def login():
             resp.set_cookie('token', token)
             return resp
         else:
-            return render_template('login.html', error=token)
+            return render_template('accounts_login.html', error=token)
 
-    return render_template('login.html')
+    return render_template('accounts_login.html')
 
 # Register (/accounts/register)
 @app.route('/accounts/register', methods=['GET', 'POST'])
@@ -137,7 +134,7 @@ def register():
         else:
             return render_template('register.html', error=msg)
 
-    return render_template('register.html')
+    return render_template('accounts_register.html')
 
 # Logout (/accounts/logout)
 @app.route('/accounts/logout')
@@ -150,3 +147,99 @@ def logout():
 @app.route('/accounts/me')
 def my_account():
     return render_template('misc_notbuilt.html')
+
+# My
+# Dashboard (/my/dashboard)
+@app.route('/my/dashboard')
+def my_dashboard():
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Profile (/my/profile)
+@app.route('/my/profile')
+def my_profile():
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Goals (/my/goals)
+@app.route('/my/goals')
+def my_goals():
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Tasks (/my/tasks)
+@app.route('/my/tasks')
+def my_tasks():
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Create Goal (/my/goals/create)
+@app.route('/my/goals/create')
+def my_goals_create():
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Edit Goal (/my/goals/edit/<goal_id>)
+@app.route('/my/goals/edit/<goal_id>')
+def my_goals_edit(goal_id):
+    if not auth(request)[0]:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('misc_notbuilt.html')
+
+# Misc
+# Index (/)
+@app.route('/')
+def index():
+    if auth(request)[0]:
+        return redirect('/my/dashboard')
+    return render_template('misc_index.html')
+
+# About (/about)
+@app.route('/about')
+def about():
+    return render_template('misc_about.html')
+
+# Admin
+# Dashboard (/admin/dashboard)
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    a, user = auth(request)
+    if not a or 'admin' not in user[10]:
+        return redirect('/accounts/login?next=' + request.path)
+    
+    return render_template('misc_notbuilt.html')
+
+# Users (/admin/users)
+@app.route('/admin/users')
+def admin_users():
+    a, user = auth(request)
+    if not a or 'admin' not in user[10]:
+        return redirect('/accounts/login?next=' + request.path)
+    
+    return render_template('misc_notbuilt.html')
+
+# Goals (/admin/goals)
+@app.route('/admin/goals')
+def admin_goals():
+    a, user = auth(request)
+    if not a or 'admin' not in user[10]:
+        return redirect('/accounts/login?next=' + request.path)
+    
+    return render_template('misc_notbuilt.html')
+
+# Tasks (/admin/tasks)
+@app.route('/admin/tasks')
+def admin_tasks():
+    a, user = auth(request)
+    if not a or 'admin' not in user[10]:
+        return redirect('/accounts/login?next=' + request.path)
+    
+    return render_template('misc_notbuilt.html')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(config.get("port", 8080)), debug=False)

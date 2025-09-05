@@ -84,13 +84,11 @@ a:hover {
     position: sticky;
     bottom: 0;
     z-index: 1000;
-    padding-left: 12%;
-    padding-right: 12%;
 }
 
 .base-nav-buttons {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .base-nav-buttons > button {
@@ -126,4 +124,22 @@ a:hover {
     flex: 1;
     padding: 1rem;
     box-sizing: border-box;
+}
+
+.logincontainer {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+}
+
+.loginbox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50%;
+    width: 15%;
+    color: white;
+    background-color: blue;
+    border-radius: 30px;
 }
