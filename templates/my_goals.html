@@ -1,0 +1,20 @@
+{% extends 'misc_base.html' %}
+
+{% block title %}Goals{% endblock %}
+
+{% block heading %}<h1>Goals</h1>{% endblock %}
+
+{% block body %}
+{% if not goals %}
+<p>You don't have any goals yet. Try <a href="/my/goals">setting some.</a></p>
+{% endif %}
+<br><br>
+{% for goal in goals %}
+<div class="card">
+    <p><b>{{goal[2]}}</b><br><progress value="{{((goal[5] / len(goal[6]['stages'])) * 100) }}" max="100"></progress></p>
+    <p>{{goal[3]}}</p>
+    <button onclick="document.location.href = '/my/goals/{{ goal[0] }}'">More Details</button><br><br>
+</div>
+<br>
+{% endfor %}
+{% endblock %}

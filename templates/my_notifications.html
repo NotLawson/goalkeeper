@@ -1,0 +1,24 @@
+{% extends "misc_base.html" %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block heading %}<h1>Notifications</h1>{% endblock %}
+
+{% block body %}
+{% if not user[9] %}
+<p>You don't have any notifications yet. Enjoy the peace and quiet!</p>
+{% endif %}
+<br>
+{% for notification in user[9] %}
+<br>
+<div class="card">
+    <p><b>{{ notification["title"] }}</b></p>
+    <p><time style="color: unset; font-weight: unset;" datetime="{{ notification["created_at"].isoformat() }}"></time></p>
+    <p>{{ notification["message"] }}</p>
+    <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
+        <button onclick="document.location.href = '{{ notification["action"] }}'">Follow</button>
+        <button onclick="document.location.href = '/my/notifications/{{ notification["id"] }}/dismiss'">Dismiss</button>
+    </div><br>
+</div>
+{% endfor %}
+{% endblock %}

@@ -15,7 +15,7 @@ p {
     margin-left: 5px;
 }
 
-H1, H2, H3 {
+H1, H2, H3, H4, H5, H6 {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
     font-weight: bold;
@@ -98,6 +98,22 @@ a:hover {
     height: 100%;
 }
 
+.card {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-left: 20%; margin-right: 20%;
+}
+
+@media (max-width: 800px) {
+    .card {
+        margin-left: 5%; margin-right: 5%;
+    }
+}
+
+.past-date {
+    color: red;
+    font-weight: bold;
+}
 /* navigation bar overlayed on top of the webpage using base.html */
 .base-nav {
     align-items: center;

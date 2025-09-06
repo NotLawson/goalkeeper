@@ -3,65 +3,55 @@
 
 {% block heading %}
 <div>
-    <h1>Hi there, {{user[3]}}</h1>
+    <h1>Hi there, {{user[3]}} {% if not len(user[9])==0 %}<a href="/my/notifications">({{len(user[9])}} new notifications)</a>{% endif %}</h1>
 </div>
 {% endblock %}
 
 {% block body %}
-<div id="goals" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
+<div id="goals" style="padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
     <h2>Your Goals</h2>
     <div class="dbitem">
-        {% set i = 0 %}
+        {% if not goals %}
+            <p>No goals to show! Get cracking and <a href="/my/goals">set some goals.</a></p>
+        {% endif %}
         {% if goals %}
             {% for goal in goals %}
             <div>
-                <p>{{goal[2]}}<br><progress value="{{((goal[5] / len(goal[6]['stages'])) * 100) }}" max="100"></progress></p>
+                <p><b>{{goal[2]}}</b><br><progress value="{{((goal[5] / len(goal[6]['stages'])) * 100) }}" max="100"></progress></p>
                 <p>{{goal[3]}}</p>
+                <button onclick="document.location.href = '/my/goals/{{ goal[0] }}'">Go to goal</button>
+                <br><br>
             </div>
-            {% set i = i + 1 %}
-            {% if i >= 3 %}
-                {% break %}
-            {% endif %}
             {% endfor %}
         {% endif %}
     </div>
 </div>
-<div id="tasks" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
+<div id="tasks" style="padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
     <h2>Your Tasks</h2>
     <div class="dbitem">
+        {% if not tasks %}
+            <p>No tasks to show! Time to <a href="/my/goals">set some goals.</a></p>
+        {% endif %}
+        {% for task in tasks %}
         <div>
-            <p>Task 1</p>
-            <p>Description for Task 1</p>
+            <p><b>{{ task[2] }}</b></p>
+            <p>{{ task[3] }}</p>
+            <p>Due: <time datetime="{{ task[5].isoformat() }}"></time></p>
             <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
-                <button>Complete</button>
-                <button>Skip</button>
+                <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/complete'">Complete</button>
+                <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/skip'" {% if task[7] %}disabled{% endif %}>Skip</button>
             </div>
             <br>
         </div>
-        <div>
-            <p>Task 2</p>
-            <p>Description for Task 2</p>
-            <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
-                <button>Complete</button>
-                <button>Skip</button>
-            </div>
-            <br>
-        </div>
-        <div>
-            <p>Task 3</p>
-            <p>Description for Task 3</p>
-            <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
-                <button>Complete</button>
-                <button>Skip</button>
-            </div>
-            <br>
-        </div>
+        {% endfor %}
     </div>
 </div>
+<!--
 <div id="social" style="border: 1px solid black; border-radius: 5px; padding: 1%; margin-left: 5%; margin-right: 5%; margin-top: 1%;">
     <h2>Friends</h2>
     <div class="dbitem">
         <p>Nothing to see here...</p>
     </div>
 </div>
+-->
 {% endblock %}

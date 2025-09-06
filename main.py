@@ -94,9 +94,12 @@ def inject_global_variables():
 #  - Dashboard (/my/dashboard)
 #  - Profile (/my/profile)
 #  - Goals (/my/goals)
+#   - Goal Details (/my/goals/<goal_id>)
 #  - Tasks (/my/tasks)
+#   - Task Details (/my/tasks/<task_id>)
 #  - Create Goal (/my/goals/create)
-#  - Edit Goal (/my/goals/edit/<goal_id>)
+#  - Edit Goal (/my/goals/<goal_id>/edit)
+#  - Notifications (/my/notifications)
 # Misc
 #  - Index (/)
 #  - About (/about)

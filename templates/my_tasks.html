@@ -1,0 +1,25 @@
+{% extends "misc_base.html" %}
+
+{% block title %}Tasks{% endblock %}
+
+{% block heading %}<h1>Tasks</h1>{% endblock %}
+
+{% block body %}
+{% if not tasks %}
+<p>You don't have any tasks yet. Try <a href="/my/goals">setting some goals</a> to create tasks.</p>
+{% endif %}
+<br><br>
+{% for task in tasks %}
+<br>
+<div class="card">
+    <p><b>{{ task[2] }}</b></p>
+    <p>{{ task[3] }}</p>
+    <p>Due: <time datetime="{{ task[5].isoformat() }}"></time></p>
+    <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
+        <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/complete'">Complete</button>
+        <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/skip'" {% if task[7] %}disabled{% endif %}>Skip</button>
+    </div>
+    <br>
+</div>
+{% endfor %}
+{% endblock %}
