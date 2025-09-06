@@ -1,5 +1,5 @@
 # Main Server File
-print("Welcome to JCI!")
+print("GoalKeeper - Main server")
 
 # There are a couple of modules and libraries that are used by the application, like the auth module and the database module.
 # We must initalize them here, and in a specific order due to dependencies.
@@ -49,8 +49,8 @@ database = Database(
     host=config.get("database", {}).get("host", "localhost"),
     port=config.get("database", {}).get("port", 5432),
     user=config.get("database", {}).get("user", "postgres"),
-    password=config.get("database", {}).get("password", "password"),
-    dbname=config.get("database", {}).get("database", "jci"),
+    password=config.get("database", {}).get("password", "postgres"),
+    dbname=config.get("database", {}).get("database", "postgres"),
 )
 log.info("Database module loaded!")
 

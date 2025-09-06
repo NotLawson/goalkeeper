@@ -1,10 +1,10 @@
-# Just Checking In (JCI)
-> Working title.
-
+# Goalkeeper
 > This project is still way in development. Go away.
 
+## TODO: Write this documentation
+
 ## Idea
-JCI is an application to manage and track your physical and mental welbeing via goals.
+Goalkeeper (originally JCI, Just Checking In) is an application to manage and track your physical and mental welbeing via goals.
 The user sets a goal for a period of time, and a goal.
 
 ### Goals & Tasks
