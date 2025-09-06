@@ -3,7 +3,7 @@
 
 {% block heading %}
 <div>
-    <h1>Hi there, {{user[3]}} {% if not len(user[9])==0 %}<a href="/my/notifications">({{len(user[9])}} new notifications)</a>{% endif %}</h1>
+    <h1>Hi there, {{user[3]}} {% if user[9] %}{% if not len(user[9])==0 %}<a href="/my/notifications">({{len(user[9])}} new notifications)</a>{% endif %}{% endif %}</h1>
 </div>
 {% endblock %}
 
@@ -38,8 +38,8 @@
             <p>{{ task[3] }}</p>
             <p>Due: <time datetime="{{ task[5].isoformat() }}"></time></p>
             <div style="display: flex; justify-content: center; flex-direction: row; gap: 10px; flex-wrap: wrap;">
-                <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/complete'">Complete</button>
                 <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/skip'" {% if task[7] %}disabled{% endif %}>Skip</button>
+                <button onclick="document.location.href = '/my/tasks/{{ task[0] }}/complete'">Complete</button>
             </div>
             <br>
         </div>

@@ -21,15 +21,22 @@ H1, H2, H3, H4, H5, H6 {
     font-weight: bold;
 }
 
+button {
+    padding: 5px;
+    border-radius: 15px;
+}
+
 a {
     font-family: "Helvetica Neue", Arial, sans-serif;
     color: rgb(244, 188, 119) !important;
     text-decoration: none !important;
+    text-shadow: 1px 1px 1px #999;
 }
 
  /* a:hover allows us to change the style when moused over */
 a:hover {
     color:darkseagreen !important;
+    text-shadow: 1px 1px 1px darkseagreen;
 }
 
 /* try every center case and one should hopefully work */
@@ -52,7 +59,7 @@ a:hover {
 .index-navbar-links {
     display: flex; /* makes the divisions flexible and is how they're aligned together */
     flex: 5; /* gives this division more space in topbar 5:1 */
-    gap: 8px; /* creates space between objects */
+    gap: 15px; /* creates space between objects */
     align-items: center; /* duh */
     justify-content: flex-end; /* places the links at the end of the division (right) */
 }
@@ -131,6 +138,7 @@ a:hover {
     align-items: center;
     border: 1px solid black;
     height: 100%;
+    border-radius: unset;
 }
 
 .base-nav > button:hover {
@@ -163,18 +171,23 @@ a:hover {
 
 .logincontainer {
     display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: center;
     height: 100%;
+    width: 100%;
 }
 
 .loginbox {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 50%;
-    width: 15%;
+    width: 300px;
     color: white;
-    background-color: blue;
-    border-radius: 30px;
+    background-color: #999;
+    border-radius: 10px;
+}
+
+.loginbox > H1, .loginbox > p {
+    text-shadow: 2px 2px 2px #666;
 }

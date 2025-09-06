@@ -61,8 +61,8 @@ class Database:
                 username VARCHAR(50) UNIQUE NOT NULL,
                 email VARCHAR(100) UNIQUE,
                 name VARCHAR(100) NOT NULL,
-                password BYTEA NOT NULL,
-                salt BYTEA NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                salt VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 online_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 settings TEXT,
@@ -80,7 +80,7 @@ class Database:
         # - name: The name of the token.
         self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS tokens (
-                token VARCHAR(16) PRIMARY KEY,
+                token VARCHAR(32) PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 name VARCHAR(50)
@@ -151,7 +151,10 @@ class Database:
     def execute_query(self, query, params=()):
         # Execute a query on the database
         self.cursor.execute(query, params)
-        return self.cursor.fetchall()
+        try:
+            return self.cursor.fetchall()
+        except Exception as e:
+            return []
     def execute_command(self, command, params=()):
         # Execute a command on the database
         self.cursor.execute(command, params)

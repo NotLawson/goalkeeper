@@ -5,18 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
 <body>
+    {% if error %}
+    <div class="error">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
     <div class="logincontainer">
         <div class="loginbox">
             <h1>Login</h1>
-            <form method="POST">
-                <p>Username/Email</p>
-                <input type="text" name="Username">
-                <p>Password</p>
-                <input type="password" name="Password">
+            <form id="login-form" method="POST">
+                <p>Username/Email
+                <br><input type="text" name="username"></p>
+                <p>Password
+                <br><input type="password" name="password"></p>
+                <input type="submit" style="display: none;">
             </form>
-            <br>
-            <p >Don't have a password?</p>
-            <a href="/accounts/register">Sign Up</a>
+            <button onclick="document.getElementById('login-form').submit();">Login</button>
+            <p><a href="/accounts/register">Don't have an account? </a></p>
         </div>
     </div>
 </body>

@@ -1,0 +1,31 @@
+{% extends "misc_base.html" %}
+
+{% block title %}Account{% endblock %}
+
+{% block heading %}<h1>Account</h1>{% endblock %}
+{% block body %}
+{% if complete %}
+<div class="done">
+    <p>{{complete }}</p>
+</div>
+{% endif %}
+{% if error %}
+<div class="error">
+    <p>{{ error }}</p>
+</div>
+{% endif %}
+
+<form method="POST">
+    <p>Name</p>
+    <input type="text" name="name" value="{{ user[3] }}">
+    <p>Username</p>
+    <input type="text" name="username" value="{{ user[1] }}">
+    <p>Email</p>
+    <input type="email" name="email" value="{{ user[2] }}">
+    <p>Password</p>
+    <input type="password" name="password" placeholder="Enter new password if you want to change it"><br><br>
+    <br><br>
+    <input type="submit" value="Update">
+</form><br>
+<button onclick="window.location.href = '/accounts/logout'">Logout</button><br>
+{% endblock %}

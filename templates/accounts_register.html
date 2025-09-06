@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    {% if error %}
+    <div class="error">
+        <p>{{ error }}</p>
+    </div>
+    {% endif %}
+    <div class="logincontainer">
+        <div class="loginbox">
+            <h1>Create an account</h1>
+            <form id="register-form" method="POST">
+                <p>Name<br>
+                <input type="text" name="name"></p>
+                <p>Username<br>
+                <input type="text" name="username"></p>
+                <p>Email<br>
+                <input type="email" name="email"></p>
+                <p>Password<br>
+                <input type="password" name="password"></p>
+                <input type="submit" style="display: none;">
+            </form>
+            <button onclick="document.getElementById('register-form').submit();">Register</button>
+            <p style="padding: 0px"><a href="/accounts/login">Sign Up</a></p>
+        </div>
+    </div>
+</body>

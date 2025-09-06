@@ -4,6 +4,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('accounts_login.html')
+    return render_template('accounts_register.html')
 
 app.run(debug=True)

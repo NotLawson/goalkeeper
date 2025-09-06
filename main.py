@@ -112,8 +112,8 @@ def inject_global_variables():
 # Accounts
 
 # Login (/accounts/login)
-@app.route('/account/logins/', methods=['GET', 'POST'])
-def login():
+@app.route('/accounts/login', methods=['GET', 'POST'])
+def accounts_login():
     if auth(request)[0]:
         return redirect(request.args.get('next', '/my/dashboard'))
     if request.method == 'POST':
@@ -131,7 +131,7 @@ def login():
 
 # Register (/accounts/register)
 @app.route('/accounts/register', methods=['GET', 'POST'])
-def register():
+def accounts_register():
     if auth(request)[0]:
         return redirect('/my/dashboard')
     if request.method == 'POST':
@@ -146,29 +146,57 @@ def register():
             resp.set_cookie('token', token)
             return resp
         else:
-            return render_template('register.html', error=msg)
+            return render_template('accounts_register.html', error=msg)
 
     return render_template('accounts_register.html')
 
 # Logout (/accounts/logout)
 @app.route('/accounts/logout')
-def logout():
-    resp = make_response(redirect('/'))
-    resp.set_cookie('token', '', expires=0)
-    return resp
+def accounts_logout():
+    success, msg = auth.delete_token(request.cookies.get('token'))
+    if success:
+        resp = make_response(redirect('/'))
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    return jsonify({"error": msg}), 400
 
 # My Account (/accounts/me)
-@app.route('/accounts/me')
+@app.route('/accounts/me', methods=['GET', 'POST'])
 def my_account():
-    return render_template('misc_notbuilt.html')
+    success, user = auth(request)
+    if not success:
+        return redirect('/accounts/login?next=' + request.path)
+    if request.method == 'POST':
+        username = request.form.get('username')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        name = request.form.get('name')
+        tags = user[10] # keep existing tags
+        success, msg = auth.update_user(auth(request)[1][0], username, password, email, name, tags)
+        if success:
+            _, user = auth(request)
+            return render_template('accounts_me.html', complete=msg, user=user)
+        else:
+            return render_template('accounts_me.html', error=msg, user=user)
+
+    user = auth(request)[1]
+    return render_template('accounts_me.html', user=user)
+
 
 # My
 # Dashboard (/my/dashboard)
 @app.route('/my/dashboard')
 def my_dashboard():
-    if not auth(request)[0]:
+    success, user = auth(request)
+    if not success:
         return redirect('/accounts/login?next=' + request.path)
-    return render_template('misc_notbuilt.html')
+    goals = database.execute_query("SELECT * FROM goals WHERE user_id = %s ORDER BY created_at DESC LIMIT 3;", (user[0],))
+    tasks = []
+    for goal in goals:
+        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s ORDER BY created_at DESC;", (goal[0],))
+        tasks.extend(goal_tasks)
+    
+    return render_template('my_dashboard.html', user=user, goals=goals, tasks=tasks)
 
 # Profile (/my/profile)
 @app.route('/my/profile')
@@ -180,16 +208,24 @@ def my_profile():
 # Goals (/my/goals)
 @app.route('/my/goals')
 def my_goals():
-    if not auth(request)[0]:
+    success, user = auth(request)
+    if not success:
         return redirect('/accounts/login?next=' + request.path)
-    return render_template('misc_notbuilt.html')
+    goals = database.execute_query("SELECT * FROM goals WHERE user_id = %s ORDER BY created_at DESC LIMIT 3;", (user[0],))
+    return render_template('my_goals.html', user=user, goals=goals)
 
 # Tasks (/my/tasks)
 @app.route('/my/tasks')
 def my_tasks():
-    if not auth(request)[0]:
+    success, user = auth(request)
+    if not success:
         return redirect('/accounts/login?next=' + request.path)
-    return render_template('misc_notbuilt.html')
+    goals = database.execute_query("SELECT * FROM goals WHERE user_id = %s ORDER BY created_at DESC LIMIT 3;", (user[0],))
+    tasks = []
+    for goal in goals:
+        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s ORDER BY created_at DESC;", (goal[0],))
+        tasks.extend(goal_tasks)
+    return render_template('my_tasks.html', user=user, tasks=tasks)
 
 # Create Goal (/my/goals/create)
 @app.route('/my/goals/create')
