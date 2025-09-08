@@ -1,0 +1,50 @@
+<!--Goal creation... pray for me-->
+{% extends "misc_base.html" %}
+
+{% block title %}New Goal{% endblock %}
+
+{% block heading %}<h1>New Goal</h1>{% endblock %}
+
+{% block imports %}
+<script src="/static/js/modal.js"></script>
+<script src="/static/js/new_goal.js" defer></script>
+{% endblock %}
+
+{% block body %}
+<div>
+    <p>Title:<br>
+        <input type="text" name="title">
+    </p>
+    <p>Description:<br>
+        <textarea name="description" rows="4" cols="50"></textarea>
+    </p>
+    <p>Stages<br><br>
+    <span id="stages"></span>
+    <button type="button" onclick="newStage()">Add Stage</button>
+    </p>
+</div>
+
+<!--Modal-->
+<span id="stageModalContainer"></span>
+<div id="stageModalTemplate" class="modal" hidden>
+    <div class="modal-content">
+        <h1>New Stage</h1>
+        <p style="color: red;" name="error" hidden>Please make sure you have filled out all fields!</p>
+        <input type="text" name="stageTitle" placeholder="Title"><br>
+        <textarea name="stageDescription" rows="4" cols="50" placeholder="Description"></textarea><br>
+        <label for="stageDuration">Duration (weeks):</label>
+        <input type="number" id="stageDuration" name="stageDuration" min="1" placeholder="Duration">
+        <br><br>
+        <h1>Tasks</h1>
+        <ul id="tasksList" style="list-style-type: none;">
+            <li><input name="title" placeholder="Task Title"><input type="text" name="description" placeholder="Task Description"><select name="timeperiod"><option selected value="daily">Daily</option><option value="weekly">Weekly</option></select><select name="optional"><option selected value="required">Required</option><option value="optional">Optional</option></select></li>
+        </ul>
+        <button type="button" onclick="newTask()">New Task</button><br><br>
+        <br><br>
+        <h1>Milestone</h1>
+        <p><input name="milestoneTitle" placeholder="Milestone Title"><input type="text" name="milestoneDescription" placeholder="Milestone Description"></p>
+        <button type="button" onclick="saveStage()">Add Stage</button>
+        <p id="test"></p>
+    </div>
+</div>
+{% endblock %}

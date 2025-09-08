@@ -93,7 +93,7 @@ class Database:
         # - user_id: ID of the user who owns the task
         # - title: Title of the goal
         # - description: Description of the goal
-        # - created_at: The timestamp of when the goal was created.
+        # - created_at: The timestamp of when the goal was created
         # - stage: The current stage of the goal (1, 2, 3)
         # - config: JSON configuration for the goal
         #  - stages: List of stages for the goal
@@ -103,7 +103,7 @@ class Database:
         #   - tasks: List of tasks for the stage.
         #     - title: Title of the task.
         #     - description: Description of the task.
-        #     - type: Type of task, can be daily, weekly or monthly
+        #     - type: Type of task, can be daily or weekly
         #     - optional: Whether the task is optional or not.
         #   - milestone: The milestone associated with the stage.
         #   - duration: The duration of the stage in weeks. Will be used when deciding the timeline for the goal.
