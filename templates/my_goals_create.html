@@ -18,10 +18,11 @@
     <p>Description:<br>
         <textarea name="description" rows="4" cols="50"></textarea>
     </p>
-    <p>Stages<br><br>
-    <span id="stages"></span>
-    <button type="button" onclick="newStage()">Add Stage</button>
+    <p>Stages <button type="button" onclick="newStage()">Add Stage</button><br><br>
+    <div id="stages" class="stageContainer">        
+    </div><br>
     </p>
+    <button type="button" onclick="sendit()">Create Goal</button>
 </div>
 
 <!--Modal-->
@@ -44,7 +45,32 @@
         <h1>Milestone</h1>
         <p><input name="milestoneTitle" placeholder="Milestone Title"><input type="text" name="milestoneDescription" placeholder="Milestone Description"></p>
         <button type="button" onclick="saveStage()">Add Stage</button>
-        <p id="test"></p>
     </div>
 </div>
+<div id="editStageModalTemplate" class="modal" hidden>
+    <div class="modal-content">
+        <h1>Edit Stage</h1>
+        <p style="color: red;" name="error" hidden>Please make sure you have filled out all fields!</p>
+        <input type="text" name="stageTitle" placeholder="Title"><br>
+        <textarea name="stageDescription" rows="4" cols="50" placeholder="Description"></textarea><br>
+        <label for="stageDuration">Duration (weeks):</label>
+        <input type="number" id="stageDuration" name="stageDuration" min="1" placeholder="Duration">
+        <br><br>
+        <h1>Tasks</h1>
+        <ul id="tasksList" style="list-style-type: none;">
+        </ul>
+        <button type="button" onclick="newTask()">New Task</button><br><br>
+        <br><br>
+        <h1>Milestone</h1>
+        <p><input name="milestoneTitle" placeholder="Milestone Title"><input type="text" name="milestoneDescription" placeholder="Milestone Description"></p>
+        <button type="button" name="update">Save Stage</button>
+    </div>
+</div>
+
+<!--Form that gets submitted lol-->
+<form id="theForm" method="post" hidden>
+    <input type="text" name="title">
+    <input type="text" name="description">
+    <input type="text" name="stages">
+</form>
 {% endblock %}

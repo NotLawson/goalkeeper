@@ -1,6 +1,6 @@
 # render pages with example data for development
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from datetime import datetime, timedelta
 app = Flask(__name__)
 
@@ -29,8 +29,11 @@ def example_data():
     ]
     return example_user, example_goals, example_tasks
 
-@app.route('/<path:path>')
+@app.route('/<path:path>', methods=['GET', 'POST'])
 def catch_all(path):
+    if request.method == 'POST':
+        print(f"Received POST request on {path} with form data: {request.form}")
+        return render_template('misc_formDebug.html', form_data=request.form)
     example_user, example_goals, example_tasks = example_data()
     try:
         path = path.replace('/', '_')

@@ -81,7 +81,10 @@ def inject_global_variables():
         str=str,
         len=len,
         enumerate=enumerate,
-        round=round
+        round=round,
+        ZeroDivisionError=ZeroDivisionError,
+        load=json.loads,
+        dump=json.dumps
     )
 
 ## Website Structure
@@ -228,11 +231,23 @@ def my_tasks():
     return render_template('my_tasks.html', user=user, tasks=tasks)
 
 # Create Goal (/my/goals/create)
-@app.route('/my/goals/create')
+@app.route('/my/goals/create', methods=["GET", "POST"])
 def my_goals_create():
-    if not auth(request)[0]:
+    success, user = auth(request)
+    if not success:
         return redirect('/accounts/login?next=' + request.path)
-    return render_template('misc_notbuilt.html')
+    
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        config = {"stages": json.loads(request.form.get('stages'))} # quick workaround
+        try: database.execute_command("INSERT INTO goals (user_id, title, description, created_at, stage, config) VALUES (%s, %s, %s, %s, %s, %s);", (user[0], title, description, datetime.datetime.now(), 0, json.dumps(config)))
+        except Exception as e:
+            log.error(f"Error creating goal: {e}")
+            return render_template('my_goals_create.html', user=user, error="Error creating goal.")
+        return redirect('/my/goals')
+    
+    return render_template('my_goals_create.html', user=user)
 
 # Edit Goal (/my/goals/edit/<goal_id>)
 @app.route('/my/goals/edit/<goal_id>')

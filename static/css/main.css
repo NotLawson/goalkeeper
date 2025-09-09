@@ -67,6 +67,17 @@ a:hover {
 .navbar-links a {
     padding-right: 18px; /* looks nice ig */
 }
+.navbar-links a {
+    padding-right: 18px; /* looks nice ig */
+}
+
+/* the object that the navbar is flex-ending */
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
 
 /* the object that the navbar is flex-ending */
 .container {
@@ -215,4 +226,18 @@ a:hover {
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */
     border-radius: 10px;
+}
+
+.stageContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+@media (max-width: 800px) {
+    .stageContainer {
+        padding-left: 5%;
+        padding-right: 5%;
+    }
 }

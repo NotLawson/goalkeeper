@@ -17,7 +17,7 @@
         {% if goals %}
             {% for goal in goals %}
             <div>
-                <p><b>{{goal[2]}}</b><br><progress value="{{((goal[5] / len(goal[6]['stages'])) * 100) }}" max="100"></progress></p>
+                 <p><b>{{goal[2]}}</b><br><progress value="{{((goal[5]+1) / len(load(goal[6])['stages']) * 100) }}" max="100"></progress><br>Stage {{ goal[5]+1 }} of {{ len(load(goal[6])["stages"]) }}</p>
                 <p>{{goal[3]}}</p>
                 <button onclick="document.location.href = '/my/goals/{{ goal[0] }}'">Go to goal</button>
                 <br><br>

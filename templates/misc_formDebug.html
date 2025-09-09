@@ -1,0 +1,14 @@
+{% extends "misc_base.html" %}
+
+{% block body %}
+<div>
+    <h1>Form Debug</h1>
+    <p>This page is for debugging form submissions. It will display the contents of the form that was submitted.</p>
+    <h2>Form Data</h2>
+    <ul>
+        {% for key, value in form_data.items() %}
+        <li><strong>{{ key }}:</strong> {{ value }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
