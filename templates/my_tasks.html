@@ -2,11 +2,11 @@
 
 {% block title %}Tasks{% endblock %}
 
-{% block heading %}<h1>Tasks</h1>{% endblock %}
+{% block heading %}<h1>Tasks (<a href="/my/tasks?filter=all">All</a>)</h1>{% endblock %}
 
 {% block body %}
 {% if not tasks %}
-<p>You don't have any tasks yet. Try <a href="/my/goals">setting some goals</a> to create tasks.</p>
+<p>You don't have any tasks yet. Try <a href="/my/goals/create">setting some goals</a> to create tasks.</p>
 {% endif %}
 <br><br>
 {% for task in tasks %}
