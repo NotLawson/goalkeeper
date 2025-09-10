@@ -1,6 +1,5 @@
 /* Setup webpage formatting */
 body {
-    overflow: hidden;  /* No scrolling */
     margin: 0;  /* attempt at making formating more standardised */
     display: flex;  /* I love flex */
     flex-direction: column;  /* sorts divisions above each other (aka how the homepage works) */
@@ -265,4 +264,17 @@ a:hover {
         padding-left: 5%;
         padding-right: 5%;
     }
+}
+
+.error {
+    background-color: red;
+    font-weight: bold;
+    text-align: center;
+    border: 1px black solid;
+    border-radius: 5px;
+    padding: 1%;
+    margin-bottom: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+    
 }

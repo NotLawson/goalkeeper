@@ -252,6 +252,42 @@ def my_tasks():
     return render_template('my_tasks.html', user=user, tasks=final)
 
 # Task Complete
+@app.route('/my/tasks/<task_id>/complete')
+def my_tasks_complete(task_id):
+    success, user = auth(request)
+    if not success:
+        return redirect('/accounts/login?next=' + request.path)
+    task = database.execute_query("SELECT * FROM tasks WHERE id = %s;", (task_id,))
+    if len(task) == 0:
+        return jsonify({"error": "Task not found"}), 404
+    task = task[0]
+    goal = database.execute_query("SELECT * FROM goals WHERE id = %s AND user_id = %s;", (task[1], user[0]))
+    if len(goal) == 0 or user[0] != goal[0][1]:
+        return redirect('/accounts/logout')
+    try: database.execute_command("UPDATE tasks SET status = %s WHERE id = %s;", ('complete', task_id))
+    except Exception as e:
+        log.error(f"Error completing task: {e}")
+        return redirect('/my/tasks?error=Error completing task.')
+    return redirect('/my/tasks')
+
+# Task Skip
+@app.route('/my/tasks/<task_id>/skip')
+def my_tasks_skip(task_id):
+    success, user = auth(request)
+    if not success:
+        return redirect('/accounts/login?next=' + request.path)
+    task = database.execute_query("SELECT * FROM tasks WHERE id = %s;", (task_id,))
+    if len(task) == 0:
+        return jsonify({"error": "Task not found"}), 404
+    task = task[0]
+    goal = database.execute_query("SELECT * FROM goals WHERE id = %s AND user_id = %s;", (task[1], user[0]))
+    if len(goal) == 0 or user[0] != goal[0][1]:
+        return redirect('/accounts/logout')
+    try: database.execute_command("UPDATE tasks SET status = %s WHERE id = %s;", ('skipped', task_id))
+    except Exception as e:
+        log.error(f"Error skipping task: {e}")
+        return redirect('/my/tasks?error=Error skipping task.')
+    return redirect('/my/tasks')
 
 # Create Goal (/my/goals/create)
 @app.route('/my/goals/create', methods=["GET", "POST"])

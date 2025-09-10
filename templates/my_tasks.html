@@ -4,6 +4,20 @@
 
 {% block heading %}<h1>Tasks (<a href="/my/tasks?filter=all">All</a>)</h1>{% endblock %}
 
+{% block imports %}
+<script defer>
+document.addEventListener("DOMContentLoaded", function() {
+    const errorblock = document.querySelector(".error");
+    const errorpara = errorblock.querySelector("p");
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("error")) {
+        errorpara.textContent = params.get("error");
+        errorblock.hidden = false;
+    }
+});
+</script>
+{% endblock %}
+
 {% block body %}
 {% if not tasks %}
 <p>You don't have any tasks yet. Try <a href="/my/goals/create">setting some goals</a> to create tasks.</p>
@@ -11,6 +25,9 @@
 <br><br>
 {% for task in tasks %}
 <br>
+<div class="error" hidden>
+    <p></p>
+</div>
 <div class="card">
     <p><b>{{ task[2] }}</b></p>
     <p>{{ task[3] }}</p>
