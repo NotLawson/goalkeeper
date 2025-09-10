@@ -306,5 +306,44 @@ def admin_tasks():
     
     return render_template('misc_notbuilt.html')
 
+
+# 7. Task Runner
+import asyncio
+import queue
+task_queue = queue.Queue()
+async def task_runner():
+    log.info("[TaskRunner] Task runner init")
+    while True:
+        task = await task_queue.get()
+        log.info(f"[TaskRunner] Got task: {task}")
+        # Tasks look a little something like this:
+        # {"type": type, "data": data}
+        # Each type of task has it's own data
+
+        # Create tasks for stage
+        if task["type"] == "create_stage_tasks":
+            # Create all the tasks for this week
+            goal_id = task["data"]["goal_id"]
+            log.info("[TaskRunner] Creating weekly tasks")
+            goal = database.execute_query("SELECT * FROM goals WHERE id = %s;", (goal_id,))
+            goal = goal[0] if goal else False
+            if not goal: log.error("[TaskRunner] Goal not found"); continue
+            config = json.loads(goal[6])
+            current_stage = config["stages"][goal[5]]
+            tasks = current_stage["tasks"]
+            match datetime.datetime.now().weekday():
+                case 0: # Monday
+                    pass
+
+            start_date = datetime.datetime.now() + datetime.timedelta(week=1)
+            start_date.replace(weekday=0) # Start of the week
+            days_until_next_sunday = ((7 - datetime.datetime.now().weekday()) % 7) + 1
+            
+
+
+        await asyncio.sleep(1)
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(config.get("port", 8080)), debug=False)
+
+    asyncio.create_task(task_runner(), name="TaskRunner")
+    app.run(host="0.0.0.0", port=config.get("port", 5000))
