@@ -2,11 +2,11 @@
 
 {% block title %}Goals{% endblock %}
 
-{% block heading %}<h1>Goals</h1>{% endblock %}
+{% block heading %}<h1>Goals (<a href='/my/goals/create'>+</a>)</h1>{% endblock %}
 
 {% block body %}
 {% if not goals %}
-<p>You don't have any goals yet. Try <a href="/my/goals">setting some.</a></p>
+<p>You don't have any goals yet. Try <a href="/my/goals/create">setting some.</a></p>
 {% endif %}
 <br><br>
 {% for goal in goals %}

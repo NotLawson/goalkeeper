@@ -1,0 +1,21 @@
+{% extends 'misc_base.html' %}
+
+{% block title %}{{ goal[2] }}{% endblock %}
+
+{% block body %}
+<h1>{{ goal[2] }}</h1>
+<p><button onclick="location.href='/my/goals/{{ goal[0] }}/edit'">Edit</button>  <button onclick="location.href = '/my/goals/{{ goal[0] }}/delete'">Delete</button></p>
+<p>{{ goal[3] }}</p>
+<p>Created at: <time datetime="{{ goal[4].isoformat() }}"></time></p>
+<p>Current Stage: {{ load(goal[6])["stages"][goal[5]]["title"] }} ({{ goal[5] + 1 }} of {{ load(goal[6])["stages"]|length }})</p>
+<h2>Tasks</h2>
+<ul>
+    {% for task in tasks %}
+        <li>
+            <strong>{{ task["title"] }}</strong> - {% if task[6] == "complete" %}Completed{% else %}Incomplete{% endif %}
+            <p>{{ task["description"] }}</p>
+            <p>Due: <time datetime="{{ task[5].isoformat() }}"></time></p>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
