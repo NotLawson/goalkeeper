@@ -1,4 +1,4 @@
-/* Make website look good (hopefully) */
+/* Setup webpage formatting */
 body {
     overflow: hidden;  /* No scrolling */
     margin: 0;  /* attempt at making formating more standardised */
@@ -7,28 +7,32 @@ body {
     height: 100vh; /* full screen height */
 }
 
-/* make stuff look nice */
-p, label {
+/* setup formatting for tag types */
+/* paragraph font stuff */
+p { 
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
     margin-top: 5px;
     margin-left: 5px;
 }
 
-H1, H2, H3, H4, H5, H6 {
+/* Headers */
+H1, H2, H3 {
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
     font-weight: bold;
 }
 
+/* buttons */
 button {
     padding: 5px;
     border-radius: 15px;
 }
 
+/* hyperlinks*/
 a {
     font-family: "Helvetica Neue", Arial, sans-serif;
-    color: rgb(244, 188, 119) !important;
+    color: rgb(244, 188, 119) !important; /* !important makes the style actually work */
     text-decoration: none !important;
     text-shadow: 1px 1px 1px #999;
 }
@@ -64,11 +68,8 @@ a:hover {
     justify-content: flex-end; /* places the links at the end of the division (right) */
 }
 
-.navbar-links a {
-    padding-right: 18px; /* looks nice ig */
-}
-.navbar-links a {
-    padding-right: 18px; /* looks nice ig */
+.navbar-links > a {
+    padding-right: 18px;
 }
 
 /* the object that the navbar is flex-ending */
@@ -83,24 +84,23 @@ a:hover {
 .container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 100vh; /* full height makes formatting work with the entire screen */
     width: 100vw;
 }
 
 .heading {
     text-align: center;
-
 }
 
 /* the space for the page contents underneath the base page */
-.page_content {
+.page_content { /*  */
     height: 100%;
     text-align: center;
     padding-left: 5%;
     padding-right: 5%;
 }
 
-/* 3grid layout for dashboard items */
+/* formating for goal cards on main page */
 .dbitem {
     display: flex;
     flex-direction: row;
@@ -116,12 +116,14 @@ a:hover {
     height: 100%;
 }
 
+/* individual card formating */
 .card {
     border: 1px solid black;
     border-radius: 5px;
     margin-left: 20%; margin-right: 20%;
 }
 
+/* hold info for data creation */
 @media (max-width: 800px) {
     .card {
         margin-left: 5%; margin-right: 5%;
@@ -136,7 +138,7 @@ a:hover {
 .base-nav {
     align-items: center;
     height: 15%;
-    background-color: #888; /* Example color */
+    background-color: #888;
     color: white;
     position: sticky;
     bottom: 0;
@@ -145,8 +147,9 @@ a:hover {
     grid-template-columns: repeat(4, 1fr);
 }
 
+/* change the buttons in the navbar specifically */
 .base-nav > button {
-    align-items: center;
+    align-items: center; 
     border: 1px solid black;
     height: 100%;
     border-radius: unset;
@@ -165,13 +168,29 @@ a:hover {
     border-bottom: 3px solid #f4bc77;
 }
 
-/* the body of the homepage */
+/* the body of the landing page */
+.index-navbar {
+    padding: 20px;
+    margin: 0px;
+    height: 20%;
+    background-color: #888;
+    color: white;
+}
+
 .index-custom-body {
-    display: flex; /* my beloved */
+    display: flex; /* I love flex */
     overflow: hidden;  /* We don't want people scrolling on a landing page */
     height: 100%; /* take up the rest of the page in space */
     justify-content: center; /* center the text horizontally */
     padding-bottom: 20px; /* get some distance so it doesn't look like a footer */
+    align-items: last baseline;
+}
+
+.index-custom-body-container {
+    display: flex; /* flex is a lifestyle */
+    flex-direction: column;
+    text-align: center;
+    
 }
 
 .custom-body {
@@ -180,6 +199,8 @@ a:hover {
     box-sizing: border-box;
 }
 
+/* formatting for the login/register pages */
+/* container so I can center */
 .logincontainer {
     display: flex;
     flex-direction: row;
@@ -189,6 +210,7 @@ a:hover {
     width: 100%;
 }
 
+/* box styling */
 .loginbox {
     display: flex;
     flex-direction: column;
@@ -196,9 +218,10 @@ a:hover {
     width: 300px;
     color: white;
     background-color: #999;
-    border-radius: 10px;
+    border-radius: 10px; /* rounded corners :) */
 }
 
+/* text shadow for visibility */
 .loginbox > H1, .loginbox > p {
     text-shadow: 2px 2px 2px #666;
 }
@@ -228,13 +251,15 @@ a:hover {
     border-radius: 10px;
 }
 
+/* formatting for stage section in goal creator */
 .stageContainer {
-    display: flex;
+    display: flex; /* I could write a romance novel about flex display mode */
     flex-direction: column;
     gap: 10px;
     padding-left: 20%;
     padding-right: 20%;
 }
+/* Holds user information creating stages */
 @media (max-width: 800px) {
     .stageContainer {
         padding-left: 5%;
