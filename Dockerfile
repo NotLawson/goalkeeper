@@ -16,4 +16,4 @@ COPY . .
 EXPOSE 5000
 
 # Set the startup command to run the server
-CMD ["python", "-u", "main.py"]
+ENTRYPOINT ["python", "-u", "main.py"]
