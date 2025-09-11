@@ -186,8 +186,7 @@ def my_account():
     return render_template('accounts_me.html', user=user)
 
 
-# My
-# Dashboard (/my/dashboard)
+# My Dashboard (/my/dashboard)
 @app.route('/my/dashboard')
 def my_dashboard():
     success, user = auth(request)
@@ -196,7 +195,7 @@ def my_dashboard():
     goals = database.execute_query("SELECT * FROM goals WHERE user_id = %s ORDER BY created_at ASC LIMIT 3;", (user[0],))
     tasks = []
     for goal in goals:
-        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s ORDER BY created_at ASC LIMIT 3;", (goal[0],))
+        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s AND status = 'incomplete' ORDER BY created_at ASC LIMIT 3;", (goal[0],))
         tasks.extend(goal_tasks)
     
     return render_template('my_dashboard.html', user=user, goals=goals, tasks=tasks)
@@ -238,9 +237,15 @@ def my_tasks():
         return redirect('/accounts/login?next=' + request.path)
     goals = database.execute_query("SELECT * FROM goals WHERE user_id = %s ORDER BY created_at DESC;", (user[0],))
     tasks = []
-    for goal in goals:
-        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s AND DATE(due_date) = DATE(now()) ORDER BY created_at ASC;", (goal[0],))
-        tasks.extend(goal_tasks)
+    #if request.args.get('filter', 'incomplete') == 'all':
+    if True:
+        for goal in goals:
+            goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s ORDER BY created_at ASC;", (goal[0],))
+            tasks.extend(goal_tasks)
+    #else:
+    #    for goal in goals:
+    #        goal_tasks = database.execute_query("SELECT * FROM tasks WHERE goal_id = %s AND DATE(due_date) = DATE(now()) ORDER BY created_at ASC;", (goal[0],))
+    #        tasks.extend(goal_tasks)
     tasks.sort(key=lambda x: x[5])  # Sort tasks by due date
     final = []
     if request.args.get('filter', 'incomplete') == 'incomplete':
@@ -264,6 +269,18 @@ def my_tasks_complete(task_id):
     goal = database.execute_query("SELECT * FROM goals WHERE id = %s AND user_id = %s;", (task[1], user[0]))
     if len(goal) == 0 or user[0] != goal[0][1]:
         return redirect('/accounts/logout')
+    if task[8]: # milestone
+        if goal[0][5] + 1 < len(json.loads(goal[0][6])["stages"]): # if not last stage
+            try: database.execute_command("UPDATE goals SET stage = stage + 1 WHERE id = %s;", (goal[0][0],))
+            except Exception as e:
+                log.error(f"Error advancing goal stage: {e}")
+                return redirect('/my/tasks?error=Error completing task.')
+            task_queue.put({"type": "create_stage_tasks", "data": {"goal_id": goal[0][0]}})
+        else:
+            log.info(f"Goal {goal[0][0]} completed!")
+            database.execute_command("DELETE FROM tasks WHERE goal_id = %s;", (goal[0][0],)) # delete all tasks
+            return redirect('/my/goals/complete')
+
     try: database.execute_command("UPDATE tasks SET status = %s WHERE id = %s;", ('complete', task_id))
     except Exception as e:
         log.error(f"Error completing task: {e}")
@@ -351,6 +368,14 @@ def my_goals_delete(goal_id):
         log.error(f"Error deleting goal: {e}")
         return render_template('my_goals_goal.html', user=user, goal=goal, error="Error deleting goal.")
     return redirect('/my/goals')
+
+# My Goals Complete (/my/goals/complete)
+@app.route('/my/goals/complete')
+def my_goals_complete():
+    success, user = auth(request)
+    if not success:
+        return redirect('/accounts/login?next=' + request.path)
+    return render_template('my_goals_complete.html', user=user)
 
 # Misc
 # Index (/)
@@ -448,6 +473,14 @@ def task_runner():
                                     task["due_date"] = current_day
                                     database.execute_command("INSERT INTO tasks (goal_id, title, description, created_at, due_date, milestone) VALUES (%s, %s, %s, %s, %s, %s);", (goal_id, task["title"], task["description"], datetime.datetime.now(), task["due_date"], True))        
                 next_sunday += datetime.timedelta(weeks=1)
+            
+            # milestone tasks
+            #ms_due_date = next_sunday - datetime.timedelta(weeks=1) # revert the week added
+            ms_due_date = next_sunday # end of the last week of the stage
+            milestone_raw = current_stage.get("milestone")
+            if milestone_raw:
+                database.execute_command("INSERT INTO tasks (goal_id, title, description, created_at, due_date, milestone) VALUES (%s, %s, %s, %s, %s, %s);", (goal_id, milestone_raw[0], milestone_raw[1], datetime.datetime.now(), ms_due_date, True))
+
             log.info("[TaskRunner] Stage tasks created")
 
         task_queue.task_done()

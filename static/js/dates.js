@@ -38,10 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     diffText = `${diffSec} second${diffSec !== 1 ? 's' : ''} ago`;
                 }
             }
-            if (diffText.slice(-3) === 'ago') {
-                timeElement.classList.add('past-date');
-            }
-            timeElement.textContent = diffText + ` (on ${utcDate.toLocaleString()})`;
+            timeElement.textContent = diffText + ` (on ${utcDate.toDateString()})`;
             console.log("[dates.js] Converted date:", timeElement.textContent);
     });
     console.log("[dates.js] Date conversion complete");
