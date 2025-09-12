@@ -1,7 +1,12 @@
 # Goalkeeper
 > This project is still way in development. Go away.
 
-## TODO: Write this documentation
+## Quickstart
+
+```
+\> docker compose up -d
+```
+This starts everything. Access the webserver on :4377
 
 ## Idea
 Goalkeeper (originally JCI, Just Checking In) is an application to manage and track your physical and mental welbeing via goals.
