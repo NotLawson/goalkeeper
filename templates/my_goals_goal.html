@@ -11,11 +11,11 @@
 <h2>Tasks</h2>
 <ul>
     {% for task in tasks %}
-        <li>
-            <strong>{{ task["title"] }}</strong> - {% if task[6] == "complete" %}Completed{% else %}Incomplete{% endif %}
-            <p>{{ task["description"] }}</p>
+        <li style="padding: 1%; border: 1px solid black; border-radius: 10px;">
+            <strong>{{ task[2] }}</strong> - {% if task[6] == "complete" %}Completed{% else %}Incomplete{% endif %}
+            <p>{{ task[3] }}</p>
             <p>Due: <time datetime="{{ task[5].isoformat() }}"></time></p>
-        </li>
+        </li><br>
     {% endfor %}
 </ul>
 {% endblock %}

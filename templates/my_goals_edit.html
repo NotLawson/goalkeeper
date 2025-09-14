@@ -8,10 +8,6 @@
 {% block imports %}
 <script src="/static/js/modal.js"></script>
 <script src="/static/js/new_goal.js" defer></script>
-<script defer>
-    var stages = {{ load(goal[6])["stages"]|tojson }};
-    updateStageList();
-</script>
 {% endblock %}
 
 {% block body %}
@@ -77,4 +73,10 @@
     <input type="text" name="description">
     <input type="text" name="stages">
 </form>
+<script>
+    var stages = {{ load(goal[6])["stages"]|tojson }};
+    document.addEventListener("DOMContentLoaded", function() {
+        updateStageList();
+    });
+</script>
 {% endblock %}

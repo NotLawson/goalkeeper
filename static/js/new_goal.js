@@ -1,7 +1,6 @@
 // JavaScript for handling the new goal creation flow
 const stageModalTemplate = document.getElementById('stageModalTemplate').cloneNode(true);
 const editStageModalTemplate = document.getElementById('editStageModalTemplate').cloneNode(true);
-var stages = [];
 
 function newStage() {
     console.log("[new_goal.js] Adding new stage");
