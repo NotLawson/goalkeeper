@@ -175,3 +175,5 @@ cython_debug/
 
 # Postgres db
 postgres
+
+config.json
