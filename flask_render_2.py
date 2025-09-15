@@ -1,4 +1,5 @@
 # render pages with example data for development
+# don't look at this stuff, just a quick and dirty way to see what the pages look like
 
 from flask import Flask, render_template, request
 from datetime import datetime, timedelta

@@ -1,6 +1,8 @@
 # Auth module for handling user authentication and authorization
-import os, sys, time, json, datetime, hashlib, hmac
+import os, json, hashlib, hmac
 import psycopg2.errors as db_errors
+
+# most of its pretty obvious, i'm not gonna comment
 class Authentication:
     def __init__(self, db):
         self.db = db

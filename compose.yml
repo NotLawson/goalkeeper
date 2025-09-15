@@ -5,7 +5,6 @@ services:
     build: .
     depends_on:
       - postgres
-    # Todo: Finish this
     ports:
       - 4377:8080
     restart: always

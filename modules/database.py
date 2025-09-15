@@ -2,7 +2,6 @@
 # This module contains the Database class to handle to the postgres database.
 import psycopg2, time
 
-
 class Database:
     def __init__(self, dbname, user, password, host, port):
         self.dbname = dbname
@@ -151,6 +150,9 @@ class Database:
     def execute_query(self, query, params=()):
         # Execute a query on the database
         self.cursor.execute(query, params)
+
+        # because i forgot that fetchone() and fetchall() are different and return different things, most of my code using this function
+        # expects a list of results, even when its just one result
         try:
             return self.cursor.fetchall()
         except Exception as e:
@@ -158,5 +160,4 @@ class Database:
     def execute_command(self, command, params=()):
         # Execute a command on the database
         self.cursor.execute(command, params)
-    
-
+        # i don't think i actually ever used this lol

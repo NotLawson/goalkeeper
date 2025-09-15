@@ -1,4 +1,6 @@
 // JavaScript for handling the new goal creation flow
+// look, i commented the python files, i'm get a pass here.
+
 const stageModalTemplate = document.getElementById('stageModalTemplate').cloneNode(true);
 const editStageModalTemplate = document.getElementById('editStageModalTemplate').cloneNode(true);
 

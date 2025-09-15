@@ -1,6 +1,8 @@
 # File manager module
 # This module controls the server's use of the file system, including file uploads, downloads, and deletions.
-import os, sys
+import os
+
+# this was supposed to save files uploaded to the site, but was never implemented
 class FileManager:
     def __init__(self, upload_folder):
         self.upload_folder = upload_folder
